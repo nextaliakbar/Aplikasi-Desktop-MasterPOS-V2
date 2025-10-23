@@ -25,21 +25,17 @@ public class Koneksi {
      * Contoh: C:\Users\NamaAnda\AppData\Roaming\MasterPOS\master_pos.db
      */
     private static String getDatabasePath() {
-        // Mengambil path ke folder AppData\Roaming
         String appDataPath = System.getenv("APPDATA");
         
-        // Membuat subfolder khusus untuk aplikasi Anda agar lebih rapi
         File appFolder = new File(appDataPath, "MasterPOS");
         if (!appFolder.exists()) {
-            appFolder.mkdirs(); // Membuat folder jika belum ada
+            appFolder.mkdirs();
         }
         
-        // Menggabungkan path folder dengan nama file database
         return appFolder.getAbsolutePath() + File.separator + "master_pos.db";
     }
 
     public static Connection getConnection() {
-        // Selalu gunakan path dari method getDatabasePath()
         String dbPath = getDatabasePath();
 
         try {
@@ -48,7 +44,6 @@ public class Koneksi {
             }
             
             Class.forName("org.sqlite.JDBC");
-            // Membuat koneksi ke database di lokasi yang benar (AppData)
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 
         } catch (ClassNotFoundException | SQLException ex) {
@@ -58,18 +53,15 @@ public class Koneksi {
     }
 
     public static void setupDatabase() {
-        // Menggunakan path yang sama untuk memeriksa keberadaan file
         String dbPath = getDatabasePath();
         File dbFile = new File(dbPath);
 
-        // File skema tetap dibaca dari folder instalasi aplikasi
         String schemaFileName = "master_pos_schema.sql";
 
         if (!dbFile.exists()) {
-            try (Connection conn = getConnection(); // Ini akan membuat file .db kosong di AppData
+            try (Connection conn = getConnection();
                  Statement stmt = conn.createStatement()) {
 
-                // Membaca skema dari folder tempat .exe berada
                 String sqlScript = new String(Files.readAllBytes(Paths.get(schemaFileName)));
 
                 stmt.executeUpdate(sqlScript);

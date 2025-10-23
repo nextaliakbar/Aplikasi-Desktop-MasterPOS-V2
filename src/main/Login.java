@@ -33,14 +33,12 @@ public class Login extends javax.swing.JFrame {
     private boolean login;
     private PanelVerifyCode panelVerify;
     private PanelLoading panelLoading;
-    private Koneksi connection;
     private ServiceLogin serviceLogin;
     private JFrame parent;
     public Login() {
         initComponents();
         this.parent = this;
-        connection = new Koneksi();
-        connection.setupDatabase();
+        Koneksi.setupDatabase();
         serviceLogin = new ServiceLogin();
         setIconImage(new ImageIcon(getClass().getResource("/image/Master Pos Logo 3.png")).getImage());
         initiation();
