@@ -21,7 +21,7 @@
 - Install NetBeans IDE
 - Konfigurasi Java Development Kit
 - Cloning atau download source code proyek
-- Salin file database inventory_schema.sql di folder proyek root directory, jika belum punya password bisa follow dan DM aku di [Instagram](https://www.instagram.com/muhmdaliakbar_raf?igsh=MWNhMHVzN214emE2dg==) ya 
+- Salin file database inventory_schema.sql di folder proyek root directory, jika belum punya password bisa follow dan DM aku di [Instagram](https://www.instagram.com/muhmdaliakbar_raf?igsh=MWNhMHVzN214emE2dg==) guys 
 <img src="Screenshot 2025-10-24 150037.png">
 
 - Buka proyek di NetBeans IDE
