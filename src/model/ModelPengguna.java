@@ -103,7 +103,7 @@ public class ModelPengguna {
     public void setKode_verifikasi(String kode_verifikasi) {
         this.kode_verifikasi = kode_verifikasi;
     }
-}
+    }
 
-   
-
+    
+    

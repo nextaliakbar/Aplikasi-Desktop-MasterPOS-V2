@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -19,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.ModelPasien;
 import model.ModelPemeriksaan;
+import model.PemeriksaanSementara;
 import swing.Pagination;
 /**
  *
@@ -128,29 +130,61 @@ public class ServicePemeriksaan {
         }
     }
         
-    public void addData(JFrame parent, ModelPemeriksaan modelPemeriksaan) {
-        String query = "INSERT INTO pemeriksaan (No_Pemeriksaan, No_Reservasi, Tanggal_Pemeriksaan, "
+    public void addData(JFrame parent, ModelPemeriksaan modelPemeriksaan, List<PemeriksaanSementara> pemeriksaanSementara) {
+        String query1 = "INSERT INTO pemeriksaan (No_Pemeriksaan, No_Reservasi, Tanggal_Pemeriksaan, "
                 + "Deskripsi, Status_Pemeriksaan, Total, Bayar, Kembali, Jenis_Pembayaran, "
                 + "ID_Pasien, ID_Karyawan, ID_Pengguna) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+        
+        String query2 = "INSERT INTO detail_pemeriksaan (No_Pemeriksaan, Kode_Tindakan, Biaya_Tindakan_Final, Potongan, Subtotal) VALUES (?,?,?,?,?)";
         try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, modelPemeriksaan.getNoPemeriksaan());
-            pst.setString(2, modelPemeriksaan.getModelReservasi().getNoReservasi());
-            pst.setString(3, modelPemeriksaan.getTglPemeriksaan());
-            pst.setString(4, modelPemeriksaan.getDeskripsi());
-            pst.setString(5, "Selesai");
-            pst.setString(6, modelPemeriksaan.getTotal());
-            pst.setDouble(7, modelPemeriksaan.getBayar());
-            pst.setDouble(8, modelPemeriksaan.getKembali());
-            pst.setString(9, modelPemeriksaan.getJenisPembayaran());
-            pst.setString(10, modelPemeriksaan.getModelPasien().getIdPasien());
-            pst.setString(11, modelPemeriksaan.getModelKaryawan().getIdKaryawan());
-            pst.setString(12, modelPemeriksaan.getModelPengguna().getIdpengguna());
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(parent, "Data Berhasil Ditambahkan");
-            pst.close();
+            connection.setAutoCommit(false);
+            try(PreparedStatement pst = connection.prepareStatement(query1)) {
+                pst.setString(1, modelPemeriksaan.getNoPemeriksaan());
+                pst.setString(2, modelPemeriksaan.getModelReservasi().getNoReservasi());
+                pst.setString(3, modelPemeriksaan.getTglPemeriksaan());
+                pst.setString(4, modelPemeriksaan.getDeskripsi());
+                pst.setString(5, "Selesai");
+                pst.setString(6, modelPemeriksaan.getTotal());
+                pst.setDouble(7, modelPemeriksaan.getBayar());
+                pst.setDouble(8, modelPemeriksaan.getKembali());
+                pst.setString(9, modelPemeriksaan.getJenisPembayaran());
+                pst.setString(10, modelPemeriksaan.getModelPasien().getIdPasien());
+                pst.setString(11, modelPemeriksaan.getModelKaryawan().getIdKaryawan());
+                pst.setString(12, modelPemeriksaan.getModelPengguna().getIdpengguna());
+                pst.executeUpdate();
+            }
+            
+            try(PreparedStatement pst = connection.prepareStatement(query2)) {
+                
+                for(var ps : pemeriksaanSementara) {
+                    pst.setString(1, modelPemeriksaan.getNoPemeriksaan());
+                    pst.setString(2, ps.getKodeTindakan());
+                    pst.setInt(3, ps.getBiayaTindakanFinal());
+                    pst.setInt(4, ps.getPotongan());
+                    pst.setInt(5, ps.getSubtotal());
+                    pst.addBatch();
+                }
+                
+                pst.executeBatch();
+            }
+            
+            connection.commit();
+            JOptionPane.showMessageDialog(parent, "Pemeriksaan baru berhasil ditambahkan");
+            
         } catch(Exception ex) {
+            try {
+                connection.rollback();
+                JOptionPane.showMessageDialog(parent, "Terjadi kesalahan saat membuat pemeriksaan baru");
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
             ex.printStackTrace();
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
     }
     

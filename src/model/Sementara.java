@@ -12,60 +12,60 @@ import java.util.List;
  */
 public class Sementara {
 
-    public Sementara(List<String> kodeBrg, List<Integer> jumlah, List<Integer> subtotal) {
+    public Sementara(String kodeBrg, Integer jumlah, Integer subtotal) {
         this.kodeBrg = kodeBrg;
         this.jumlah = jumlah;
         this.subtotal = subtotal;
     }
-
-    public Sementara(List<String> kodeBrg, List<Integer> hargaFinal, List<Integer> jumlah, List<Integer> subtotal) {
+    
+    public Sementara(String kodeBrg, Integer hargaFinal, Integer jumlah, Integer subtotal) {
         this.kodeBrg = kodeBrg;
         this.hargaFinal = hargaFinal;
         this.jumlah = jumlah;
         this.subtotal = subtotal;
     }
-    
+        
 
     public Sementara() {
     
     }
     
-    private List<String> kodeBrg;
-    private List<Integer> hargaFinal;
-    private List<Integer> jumlah;
-    private List<Integer> subtotal;
+    private String kodeBrg;
+    private Integer hargaFinal;
+    private Integer jumlah;
+    private Integer subtotal;
 
-    public List<String> getKodeBrg() {
+    public String getKodeBrg() {
         return kodeBrg;
     }
 
-    public void setKodeBrg(List<String> kodeBrg) {
+    public void setKodeBrg(String kodeBrg) {
         this.kodeBrg = kodeBrg;
     }
 
-    public List<Integer> getHargaFinal() {
+    public Integer getHargaFinal() {
         return hargaFinal;
     }
 
-    public void setHargaFinal(List<Integer> hargaBeli) {
-        this.hargaFinal = hargaBeli;
+    public void setHargaFinal(Integer hargaFinal) {
+        this.hargaFinal = hargaFinal;
     }
-    
-    public List<Integer> getJumlah() {
+
+    public Integer getJumlah() {
         return jumlah;
     }
 
-    public void setJumlah(List<Integer> jumlah) {
+    public void setJumlah(Integer jumlah) {
         this.jumlah = jumlah;
     }
 
-    public List<Integer> getSubtotal() {
+    public Integer getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(List<Integer> subtotal) {
+    public void setSubtotal(Integer subtotal) {
         this.subtotal = subtotal;
     }
-
+    
     
 }

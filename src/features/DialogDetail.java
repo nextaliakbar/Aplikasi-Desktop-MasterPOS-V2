@@ -7,21 +7,34 @@ package features;
 import util.ModelHeaderTable;
 import util.ModelRenderTable;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import control.FieldsPemeriksaan;
+import control.FieldsPenjualan;
+import control.ParamPemeriksaan;
+import control.ParamPenjualan;
+import control.Report;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import model.*;
+import net.sf.jasperreports.engine.JRException;
 import service.*;
 
 /**
@@ -76,6 +89,8 @@ public class DialogDetail extends java.awt.Dialog {
         changePanel(slide);
         styleTextArea(txtDesc, false);
         styleTextArea(txtDescPengeluaran, false);
+        actionBtnPrintPemeriksaan();
+        actionBtnPrintPenjualan();
     }
     
     private void styleTextArea(JTextArea txtArea, boolean enable) {
@@ -119,6 +134,44 @@ public class DialogDetail extends java.awt.Dialog {
         serviceDetailPemeriksaan.loadData(tabModel1, detail);
     }
     
+    //   Print pemeriksaan
+    private void printPemeriksaan() {        
+        try {
+            String noPemeriksaan = detailPemeriksaan.getModelPemeriksaan().getNoPemeriksaan();
+            List<FieldsPemeriksaan> fields = serviceDetailPemeriksaan.getData(noPemeriksaan);
+            String tglPemeriksaan = detailPemeriksaan.getModelPemeriksaan().getTglPemeriksaan();
+            Date dateNow = new Date();
+            String jamPemeriksaan = new SimpleDateFormat("HH:mm").format(dateNow) + " WIB";
+            String pasien = detailPemeriksaan.getModelPemeriksaan().getModelPasien().getNama();
+            String karyawan = detailPemeriksaan.getModelPemeriksaan().getModelKaryawan().getIdKaryawan();
+            String admin = detailPemeriksaan.getModelPemeriksaan().getModelPengguna().getIdpengguna();
+            String total = detailPemeriksaan.getModelPemeriksaan().getTotal();
+            String totalPotongan = String.valueOf(totalPotongan());
+            String bayar = df.format(detailPemeriksaan.getModelPemeriksaan().getBayar());
+            String kembali = String.valueOf(detailPemeriksaan.getModelPemeriksaan().getKembali());
+            String jenisPembayaran =  detailPemeriksaan.getModelPemeriksaan().getJenisPembayaran();
+            ParamPemeriksaan parameter = new ParamPemeriksaan(noPemeriksaan, tglPemeriksaan, jamPemeriksaan, pasien, karyawan, admin, 
+            total, totalPotongan, bayar, kembali, jenisPembayaran, fields);
+            Report.getInstance().printReportPemeriksaan(parameter);
+            dispose();
+
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(parent, ex.getMessage(), "Peringatan", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    
+    private int totalPotongan() {
+        int total = 0;
+        String noPemeriksaan = detailPemeriksaan.getModelPemeriksaan().getNoPemeriksaan();
+        for(var item : serviceDetailPemeriksaan.getData(noPemeriksaan)) {
+            int subtotal = Integer.valueOf(item.getDisc());
+            total += subtotal;
+        }
+        
+        return total;
+    }
+    
     //    Tampil Data Detail Penjualan
     private void tampilDataPenjualan() {
         ModelDetailPenjualan modelDetailPenjualan = new ModelDetailPenjualan();
@@ -142,6 +195,28 @@ public class DialogDetail extends java.awt.Dialog {
         modelPenjualan.setNoPenjualan(noPenjualan);
         modelDetailPenjualan.setModelPenjualan(modelPenjualan);
         serviceDetailPenjualan.loadData(modelDetailPenjualan, tabmodel5);
+    }
+    
+    //    Print Penjualan
+    private void printPenjualan() {
+        try {
+            String noPenjualan = detailPenjualan.getModelPenjualan().getNoPenjualan();
+            List<FieldsPenjualan> fields = serviceDetailPenjualan.getData(noPenjualan);
+            Date dateNow = new Date();
+            String tglPenjualan = detailPenjualan.getModelPenjualan().getTglPenjualan();
+            String jamPenjualan = new SimpleDateFormat("HH:mm").format(dateNow) + " WIB";
+            String admin = detailPenjualan.getModelPenjualan().getModelPengguna().getIdpengguna();
+            String total = detailPenjualan.getModelPenjualan().getTotalPenjualan();
+            String bayar = df.format(detailPenjualan.getModelPenjualan().getBayar());
+            String kembali = df.format(detailPenjualan.getModelPenjualan().getKembali());
+            String jenisPembayaran = detailPenjualan.getModelPenjualan().getJenisPembayaran();
+            ParamPenjualan paramater = new ParamPenjualan(tglPenjualan+","+jamPenjualan, noPenjualan, admin, total, bayar, kembali, jenisPembayaran, fields);
+            Report.getInstance().printReportPenjualan(paramater);
+            dispose();
+        } catch(JRException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(parent, ex.getMessage(), "Peringatan", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
     
     //    Tampil Data Detail Pemesanan
@@ -313,6 +388,7 @@ public class DialogDetail extends java.awt.Dialog {
         g2.setComposite(AlphaComposite.SrcOver);
         super.paintComponents(g); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
+    
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -322,6 +398,7 @@ public class DialogDetail extends java.awt.Dialog {
         lb1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        btnPrintPemeriksaan = new javax.swing.JButton();
         lbNoReservasi = new javax.swing.JLabel();
         lb2 = new javax.swing.JLabel();
         lbNoPemeriksaan = new javax.swing.JLabel();
@@ -427,6 +504,7 @@ public class DialogDetail extends java.awt.Dialog {
         lb32 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
+        btnPrintPenjualan = new javax.swing.JButton();
         lbTglPenjualan = new javax.swing.JLabel();
         lbNoPenjualan = new javax.swing.JLabel();
         lb41 = new javax.swing.JLabel();
@@ -464,16 +542,31 @@ public class DialogDetail extends java.awt.Dialog {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("DETAIL PEMERIKSAAN");
 
+        btnPrintPemeriksaan.setBackground(new java.awt.Color(135, 15, 50));
+        btnPrintPemeriksaan.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        btnPrintPemeriksaan.setForeground(new java.awt.Color(255, 255, 255));
+        btnPrintPemeriksaan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/printerwhite.png"))); // NOI18N
+        btnPrintPemeriksaan.setText("F1");
+        btnPrintPemeriksaan.setBorder(null);
+        btnPrintPemeriksaan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(387, 387, 387)
+                .addComponent(jLabel1)
+                .addGap(259, 259, 259)
+                .addComponent(btnPrintPemeriksaan)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPrintPemeriksaan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 2, Short.MAX_VALUE))
         );
 
@@ -796,21 +889,20 @@ public class DialogDetail extends java.awt.Dialog {
                 .addContainerGap()
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(scroll2, javax.swing.GroupLayout.DEFAULT_SIZE, 972, Short.MAX_VALUE)
-                    .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panel2Layout.createSequentialGroup()
-                            .addComponent(lb11, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(lbNoPemeriksaan2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(panel2Layout.createSequentialGroup()
-                            .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(lb8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lb10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lb13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lbTerakhirPemeriksaan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lbNamaPasien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lbIdPasien2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panel2Layout.createSequentialGroup()
+                        .addComponent(lb11, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbNoPemeriksaan2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panel2Layout.createSequentialGroup()
+                        .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(lb8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lb10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lb13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbTerakhirPemeriksaan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lbNamaPasien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lbIdPasien2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         panel2Layout.setVerticalGroup(
@@ -1434,16 +1526,31 @@ public class DialogDetail extends java.awt.Dialog {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("DETAIL PENJUALAN");
 
+        btnPrintPenjualan.setBackground(new java.awt.Color(135, 15, 50));
+        btnPrintPenjualan.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        btnPrintPenjualan.setForeground(new java.awt.Color(255, 255, 255));
+        btnPrintPenjualan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/printerwhite.png"))); // NOI18N
+        btnPrintPenjualan.setText("F1");
+        btnPrintPenjualan.setBorder(null);
+        btnPrintPenjualan.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnPrintPenjualan)
+                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPrintPenjualan))
                 .addGap(0, 2, Short.MAX_VALUE))
         );
 
@@ -1608,7 +1715,28 @@ public class DialogDetail extends java.awt.Dialog {
     private void btnBatalReservasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalReservasiActionPerformed
         perbaruiStatus();
     }//GEN-LAST:event_btnBatalReservasiActionPerformed
-
+    
+    private void actionBtnPrintPemeriksaan() {
+        btnPrintPemeriksaan.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F1"), "F1Pressed");
+        btnPrintPemeriksaan.getActionMap().put("F1Pressed", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               printPemeriksaan();
+            }
+        });
+    }
+    
+    
+    private void actionBtnPrintPenjualan() {
+        btnPrintPenjualan.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F1"), "F1Pressed");
+        btnPrintPenjualan.getActionMap().put("F1Pressed", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                printPenjualan();
+            }
+        });
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -1628,6 +1756,8 @@ public class DialogDetail extends java.awt.Dialog {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private swing.Button btnBatalReservasi;
+    private javax.swing.JButton btnPrintPemeriksaan;
+    private javax.swing.JButton btnPrintPenjualan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

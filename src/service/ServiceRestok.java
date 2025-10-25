@@ -76,47 +76,50 @@ public class ServiceRestok {
         }
     }
     
-    public void addData(JFrame parent, ModelRestok modelRestok) {
-        String query = "INSERT INTO restok (No_Restok, Tanggal, Total_Biaya, Status_Restok, ID_Pengguna) VALUES(?,?,?,?,?)";
+    public void addData(JFrame parent, ModelRestok modelRestok, List<Sementara> sementara) {
+        String query1 = "INSERT INTO restok (No_Restok, Tanggal, Total_Biaya, Status_Restok, ID_Pengguna) VALUES(?,?,?,?,?)";
+        String query2 = "INSERT INTO detail_restok (No_Restok, Kode_Barang, Jumlah, SubTotal) VALUES (?,?,?,?)";
         try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, modelRestok.getModelPemesanan().getNoPemesanan());
-            pst.setString(2, modelRestok.getTglTiba());
-            pst.setInt(3, modelRestok.getTotal());
-            pst.setString(4, "Diterima");
-            pst.setString(5, modelRestok.getModelPengguna().getIdpengguna());
-            pst.executeUpdate();
-            pst.close();
-            JOptionPane.showMessageDialog(parent, "Berhasil Menambah Stok Baru");
+            connection.setAutoCommit(false);
+            try(PreparedStatement pst = connection.prepareStatement(query1)) {
+                pst.setString(1, modelRestok.getModelPemesanan().getNoPemesanan());
+                pst.setString(2, modelRestok.getTglTiba());
+                pst.setInt(3, modelRestok.getTotal());
+                pst.setString(4, "Diterima");
+                pst.setString(5, modelRestok.getModelPengguna().getIdpengguna());
+                pst.executeUpdate();
+            }
+            
+            try(PreparedStatement pst = connection.prepareStatement(query2)) {
+                for(var data : sementara) {
+                    pst.setString(1, modelRestok.getModelPemesanan().getNoPemesanan());
+                    pst.setString(2, data.getKodeBrg());
+                    pst.setInt(3, data.getJumlah());
+                    pst.setDouble(4, data.getSubtotal());
+                    pst.addBatch();
+                }
+                
+                pst.executeBatch();
+            }
+            connection.commit();
+            JOptionPane.showMessageDialog(parent, "Berhasil menambah stok baru");
         } catch(Exception ex) {
+            try {
+                connection.rollback();
+                JOptionPane.showMessageDialog(parent, "Terjadi kesalahan saat melakukan restok");
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
             ex.printStackTrace();
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
     }
-    
-    public void addDataDetail(ModelDetailRestok modelDetail, Sementara rs) {
-        String query = "INSERT INTO detail_restok (No_Restok, Kode_Barang, Jumlah, SubTotal) VALUES (?,?,?,?)";
-        try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, modelDetail.getModelRestok().getModelPemesanan().getNoPemesanan());
-            
-            for(String kodeBrg : rs.getKodeBrg()) {
-                pst.setString(2, kodeBrg);
-            }
-            
-            for(int jumlah : rs.getJumlah()) {
-                pst.setInt(3, jumlah);
-            }
-            
-            for(double subtotal : rs.getSubtotal()) {
-                pst.setDouble(4, subtotal);
-            }
-            pst.executeUpdate();
-            pst.close();
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-    
+        
     public void loadDataStok(DefaultTableModel model) {
         String query = "SELECT brg.Kode_Barang, brg.Kode_Jenis, jb.Nama_Jenis, brg.Nama_Barang, brg.Satuan, brg.Stok FROM barang brg "
                 + "JOIN jenis_barang jb ON brg.Kode_Jenis=jb.Kode_Jenis ";

@@ -94,7 +94,7 @@ public class Report {
         parameter.put("admin", data.getAdmin());
         parameter.put("total", data.getTotal());
         parameter.put("bayar", data.getBayar());
-        parameter.put("kembalian", data.getKembalian());
+        parameter.put("kembalian", data.getKembali());
         parameter.put("jenis", data.getJenis());
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data.getFields());
         JasperPrint print = JasperFillManager.fillReport(report1, parameter, dataSource);
@@ -152,6 +152,7 @@ public class Report {
     
     private void viewReport(JasperPrint print) throws JRException {
         JasperViewer viewer = new JasperViewer(print, false);
+        viewer.setAlwaysOnTop(true);
         viewer.setTitle("Print Preview");
         viewer.setIconImage(null);
         viewer.setVisible(true);

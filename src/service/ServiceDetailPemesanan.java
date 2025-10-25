@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DecimalFormat;
-import model.Sementara;
 /**
  *
  * @author usER
@@ -53,35 +52,6 @@ public class ServiceDetailPemesanan {
                 tabmodel.addRow(new Object[]{kodeBarang, namaBarang, satuan, df.format(hrgBeli).concat(info), jumlah, df.format(subtotal)});
             }
             rst.close();
-            pst.close();
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-    
-    public void addData(ModelDetailPemesanan modelDetail, Sementara ps) {
-        String query = "INSERT INTO detail_pemesanan (No_Pemesanan, Kode_Barang, Harga_Beli_Final, Jumlah, Subtotal) VALUES (?,?,?,?,?) ";
-        try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, modelDetail.getModelPemesanan().getNoPemesanan());
-            
-            for(String kodeBrg : ps.getKodeBrg()) {
-                pst.setString(2, kodeBrg);
-            }
-            
-            for(int hargaBeli : ps.getHargaFinal()) {
-                pst.setInt(3, hargaBeli);
-            }
-            
-            for(int jumlah : ps.getJumlah()) {
-                pst.setInt(4, jumlah);
-            }
-            
-            for(int subtotal : ps.getSubtotal()) {
-                pst.setInt(5, subtotal);
-            }
-            
-            pst.executeUpdate();
             pst.close();
         } catch(Exception ex) {
             ex.printStackTrace();

@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.ModelBarang;
 import model.ModelPenjualan;
+import model.Sementara;
 import swing.Pagination;
 /**
  *
@@ -105,24 +106,54 @@ public class ServicePenjualan {
         }
     }
     
-    public void addData(JFrame parent, ModelPenjualan modelPenjualan) {
-        String query = "INSERT INTO penjualan (No_Penjualan, Tanggal, Total_Penjualan, Total_Keuntungan, Bayar, Kembali, Jenis_Pembayaran, ID_Pengguna) "
+    public void addData(JFrame parent, ModelPenjualan modelPenjualan, List<Sementara> sementara) {
+        String query1 = "INSERT INTO penjualan (No_Penjualan, Tanggal, Total_Penjualan, Total_Keuntungan, Bayar, Kembali, Jenis_Pembayaran, ID_Pengguna) "
                 + "VALUES (?,?,?,?,?,?,?,?)";
+        
+        String query2 = "INSERT INTO detail_penjualan (No_Penjualan, Kode_Barang, Harga_Jual_Final, Jumlah, Subtotal) VALUES (?,?,?,?,?) ";
         try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, modelPenjualan.getNoPenjualan());
-            pst.setString(2, modelPenjualan.getTglPenjualan());
-            pst.setString(3, modelPenjualan.getTotalPenjualan());
-            pst.setInt(4, modelPenjualan.getTotalKeuntungan());
-            pst.setDouble(5, modelPenjualan.getBayar());
-            pst.setDouble(6, modelPenjualan.getKembali());
-            pst.setString(7, modelPenjualan.getJenisPembayaran());
-            pst.setString(8, modelPenjualan.getModelPengguna().getIdpengguna());
-            pst.executeUpdate();
-            pst.close();
-            JOptionPane.showMessageDialog(parent, "Berhasil");
+            connection.setAutoCommit(false);
+            try(PreparedStatement pst = connection.prepareStatement(query1)) {
+                pst.setString(1, modelPenjualan.getNoPenjualan());
+                pst.setString(2, modelPenjualan.getTglPenjualan());
+                pst.setString(3, modelPenjualan.getTotalPenjualan());
+                pst.setInt(4, modelPenjualan.getTotalKeuntungan());
+                pst.setDouble(5, modelPenjualan.getBayar());
+                pst.setDouble(6, modelPenjualan.getKembali());
+                pst.setString(7, modelPenjualan.getJenisPembayaran());
+                pst.setString(8, modelPenjualan.getModelPengguna().getIdpengguna());
+                pst.executeUpdate();
+                
+            }
+            
+            try(PreparedStatement pst = connection.prepareStatement(query2)) {
+                for(var data : sementara) {
+                   pst.setString(1, modelPenjualan.getNoPenjualan());
+                   pst.setString(2, data.getKodeBrg());
+                   pst.setInt(3, data.getHargaFinal());
+                   pst.setInt(4, data.getJumlah());
+                   pst.setInt(5, data.getSubtotal());
+                   pst.addBatch();
+                }
+                
+                pst.executeBatch();
+            }
+            connection.commit();
+            JOptionPane.showMessageDialog(parent, "Penjualan baru berhasil ditambahkan");
         } catch(Exception ex) {
+            try {
+                connection.rollback();
+                JOptionPane.showMessageDialog(parent, "Terjadi kesaahan saat membuat penjualan baru");
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
             ex.printStackTrace();
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
     }
     

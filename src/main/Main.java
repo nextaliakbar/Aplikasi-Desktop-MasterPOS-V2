@@ -42,6 +42,7 @@ import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
+import service.ServiceLogin;
 import service.ServiceNotifikasi;
 import service.ServicePromo;
 import service.ServiceRiwayatPasien;
@@ -301,6 +302,8 @@ public class Main extends javax.swing.JFrame {
                     login.setVisible(true);
                     navbar.settings.dispose();
                     dispose();
+                    ServiceLogin serviceLogin = new ServiceLogin();
+                    serviceLogin.setStatusLogin(0, modelPengguna.getIdpengguna());
                 }
             }
         });

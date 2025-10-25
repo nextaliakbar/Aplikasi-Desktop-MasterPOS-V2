@@ -22,7 +22,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import model.ModelDetailRestok;
 import util.ModelHeaderTable;
 import model.ModelPemesanan;
 import model.ModelPengguna;
@@ -127,21 +126,17 @@ public class FiturRestok extends javax.swing.JPanel {
         ModelPengguna modelPengguna = new ModelPengguna();
         modelPengguna.setIdpengguna(idPengguna);
         ModelRestok modelRestok = new ModelRestok(modelPemesanan, tglTiba, totalBiaya, modelPengguna);
-        serviceRestok.addData(parent, modelRestok);
         
         // Tambah Detail
-        List<String> kodeBrg = new ArrayList<>();
-        List<Integer> jumlah = new ArrayList<>();
-        List<Integer> subtotal = new ArrayList<>(); 
-        ModelDetailRestok modelDetail = new ModelDetailRestok();
-        modelDetail.setModelRestok(modelRestok);
+        List<Sementara> sementara = new ArrayList<>();
         for(int a = 0; a < tableDetail.getRowCount(); a++) {
-            kodeBrg.add((String) tableDetail.getValueAt(a, 0));
-            jumlah.add((Integer)tableDetail.getValueAt(a, 3));
-            subtotal.add((Integer)tableDetail.getValueAt(a, 4));
-            Sementara rs = new Sementara(kodeBrg, jumlah, subtotal);
-            serviceRestok.addDataDetail(modelDetail, rs);
+            String kodeBrg = tableDetail.getValueAt(a, 0).toString();
+            Integer jumlah = Integer.parseInt(tableDetail.getValueAt(a, 3).toString());
+            Integer subtotal = Integer.parseInt(tableDetail.getValueAt(a, 4).toString());
+            sementara.add(new Sementara(kodeBrg, jumlah, subtotal));
         }
+        
+        serviceRestok.addData(parent, modelRestok, sementara);
     }
     
     private int getTotal() {
@@ -173,9 +168,9 @@ public class FiturRestok extends javax.swing.JPanel {
         }
         
         lbTotalStok.setText(String.valueOf(totalStok));
-        lbStokTersedia.setText(String.valueOf(stokTersedia));
-        lbStokHampirHabis.setText(String.valueOf(stokHampirHabis));
-        lbStokHabis.setText(String.valueOf(stokHabis));    
+        lbBrgTersedia.setText(String.valueOf(stokTersedia + stokHampirHabis));
+        lbBrgHampirHabis.setText(String.valueOf(stokHampirHabis));
+        lbBrgHabis.setText(String.valueOf(stokHabis));    
     }
     
     private void searchData(TableRowSorter<DefaultTableModel> rowSorter, JTextField textfield) {
@@ -261,10 +256,10 @@ public class FiturRestok extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         lbTotalStok = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        lbStokHampirHabis = new javax.swing.JLabel();
+        lbBrgHampirHabis = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
-        lbStokHabis = new javax.swing.JLabel();
-        lbStokTersedia = new javax.swing.JLabel();
+        lbBrgHabis = new javax.swing.JLabel();
+        lbBrgTersedia = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         btnBack = new javax.swing.JButton();
         scrollPane3 = new javax.swing.JScrollPane();
@@ -756,28 +751,28 @@ public class FiturRestok extends javax.swing.JPanel {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Total Stok Barang");
 
-        lbStokHampirHabis.setBackground(new java.awt.Color(135, 15, 50));
-        lbStokHampirHabis.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        lbStokHampirHabis.setForeground(new java.awt.Color(255, 255, 255));
-        lbStokHampirHabis.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbStokHampirHabis.setText("35");
+        lbBrgHampirHabis.setBackground(new java.awt.Color(135, 15, 50));
+        lbBrgHampirHabis.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        lbBrgHampirHabis.setForeground(new java.awt.Color(255, 255, 255));
+        lbBrgHampirHabis.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbBrgHampirHabis.setText("35");
 
         jLabel23.setBackground(new java.awt.Color(0, 0, 0));
         jLabel23.setFont(new java.awt.Font("Dialog", 0, 22)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(255, 255, 255));
         jLabel23.setText("Barang Habis");
 
-        lbStokHabis.setBackground(new java.awt.Color(135, 15, 50));
-        lbStokHabis.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        lbStokHabis.setForeground(new java.awt.Color(255, 255, 255));
-        lbStokHabis.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbStokHabis.setText("8");
+        lbBrgHabis.setBackground(new java.awt.Color(135, 15, 50));
+        lbBrgHabis.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        lbBrgHabis.setForeground(new java.awt.Color(255, 255, 255));
+        lbBrgHabis.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbBrgHabis.setText("8");
 
-        lbStokTersedia.setBackground(new java.awt.Color(135, 15, 50));
-        lbStokTersedia.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        lbStokTersedia.setForeground(new java.awt.Color(255, 255, 255));
-        lbStokTersedia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbStokTersedia.setText("535");
+        lbBrgTersedia.setBackground(new java.awt.Color(135, 15, 50));
+        lbBrgTersedia.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        lbBrgTersedia.setForeground(new java.awt.Color(255, 255, 255));
+        lbBrgTersedia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbBrgTersedia.setText("535");
 
         jSeparator1.setBackground(new java.awt.Color(255, 255, 255));
         jSeparator1.setForeground(new java.awt.Color(255, 255, 255));
@@ -806,15 +801,15 @@ public class FiturRestok extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbStokTersedia, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbBrgTersedia, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel17)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbStokHampirHabis, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbBrgHampirHabis, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel23)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbStokHabis, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lbBrgHabis, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(btnBack)
                         .addGap(18, 18, Short.MAX_VALUE)
@@ -834,16 +829,16 @@ public class FiturRestok extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbStokHampirHabis, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lbBrgHampirHabis, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbStokHabis, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lbBrgHabis, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(lbTotalStok, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
-                        .addComponent(lbStokTersedia)))
+                        .addComponent(lbBrgTersedia)))
                 .addContainerGap())
         );
 
@@ -1015,11 +1010,11 @@ public class FiturRestok extends javax.swing.JPanel {
     }
         
     private void clearField() {
-        lbNoPemesanan.setText(null);
-        lbTglPemesanan.setText(null);
-        lbTglTiba.setText(null);
-        lbSupplier.setText(null);
-        lbPemesan.setText(null);
+        lbNoPemesanan.setText("");
+        lbTglPemesanan.setText("");
+        lbTglTiba.setText("");
+        lbSupplier.setText("");
+        lbPemesan.setText("");
         lbTotal.setText("0");
         tabmodel2.setRowCount(0);
     }
@@ -1038,7 +1033,7 @@ public class FiturRestok extends javax.swing.JPanel {
     }
     
     private void focusGained(JTextField txtField) {
-        txtField.setText(null);
+        txtField.setText("");
         txtField.setFont(new Font("sansserif", 0, 14));
         txtField.setForeground(new Color(0, 0,0));
     }
@@ -1074,11 +1069,11 @@ public class FiturRestok extends javax.swing.JPanel {
     private javax.swing.JLabel label;
     private javax.swing.JLabel label1;
     private javax.swing.JLabel label2;
+    private javax.swing.JLabel lbBrgHabis;
+    private javax.swing.JLabel lbBrgHampirHabis;
+    private javax.swing.JLabel lbBrgTersedia;
     private javax.swing.JLabel lbNoPemesanan;
     private javax.swing.JLabel lbPemesan;
-    private javax.swing.JLabel lbStokHabis;
-    private javax.swing.JLabel lbStokHampirHabis;
-    private javax.swing.JLabel lbStokTersedia;
     private javax.swing.JLabel lbSupplier;
     private javax.swing.JLabel lbTglPemesanan;
     private javax.swing.JLabel lbTglTiba;

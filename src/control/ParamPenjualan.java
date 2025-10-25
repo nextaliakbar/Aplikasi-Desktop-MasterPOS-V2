@@ -12,13 +12,13 @@ import java.util.List;
  */
 public class ParamPenjualan {
 
-    public ParamPenjualan(String tglJam, String noPenjualan, String admin, String total, String bayar, String kembalian, String jenis, List<FieldsPenjualan> fields) {
+    public ParamPenjualan(String tglJam, String noPenjualan, String admin, String total, String bayar, String kembali, String jenis, List<FieldsPenjualan> fields) {
         this.tglJam = tglJam;
         this.noPenjualan = noPenjualan;
         this.admin = admin;
         this.total = total;
         this.bayar = bayar;
-        this.kembalian = kembalian;
+        this.kembali = kembali;
         this.jenis = jenis;
         this.fields = fields;
     }
@@ -32,7 +32,7 @@ public class ParamPenjualan {
     private String admin;
     private String total;
     private String bayar;
-    private String kembalian;
+    private String kembali;
     private String jenis;
     private List<FieldsPenjualan> fields;
 
@@ -80,13 +80,14 @@ public class ParamPenjualan {
         this.bayar = bayar;
     }
 
-    public String getKembalian() {
-        return kembalian;
+    public String getKembali() {
+        return kembali;
     }
 
-    public void setKembalian(String kembalian) {
-        this.kembalian = kembalian;
+    public void setKembali(String kembali) {
+        this.kembali = kembali;
     }
+
 
     public String getJenis() {
         return jenis;

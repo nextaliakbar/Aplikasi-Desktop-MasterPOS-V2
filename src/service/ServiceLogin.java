@@ -30,6 +30,28 @@ public class ServiceLogin {
         connection = Koneksi.getConnection();
     }
     
+    public ModelPengguna getPenggunaByStatusLogin() {
+        String query = "SELECT * FROM pengguna WHERE Status_Login=1";
+        try(PreparedStatement pst = connection.prepareStatement(query);
+                ResultSet rst = pst.executeQuery()) {
+            if(rst.next()) {
+                String idPenguna = rst.getString("ID_Pengguna");
+                String namaPengguna = rst.getString("Nama");
+                String username = rst.getString("Username");
+                String email = rst.getString("Email");
+                String level = rst.getString("Level");
+                String password = rst.getString("Password");
+                String status = rst.getString("Status_Pengguna");
+                return new ModelPengguna(idPenguna, namaPengguna, username, password, email, level,status);
+            }
+            
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return null;
+    }
+    
 //    Login
     public void login(JFrame parent, ModelPengguna modelPengguna, PanelLoading panelLoading, JFrame frameLogin) {
         String query = "SELECT * FROM pengguna WHERE (Username=? OR Email=?) AND Password=?";
@@ -50,7 +72,8 @@ public class ServiceLogin {
                             String password = rst.getString("Password");
                             String status = rst.getString("Status_Pengguna");
                             if(status.equals("Aktif")) {
-                                ModelPengguna pengguna = new ModelPengguna(idPenguna, namaPengguna, username, password, email, level,"");
+                                setStatusLogin(1, idPenguna);
+                                ModelPengguna pengguna = new ModelPengguna(idPenguna, namaPengguna, username, password, email, level,status);
                                 Main main = new Main(pengguna);
                                 panelLoading.setVisible(false);
                                 main.setVisible(true);
@@ -76,6 +99,17 @@ public class ServiceLogin {
                     }
             }).start();
         
+    }
+    
+    public void setStatusLogin(int statusLogin, String idPengguna) {
+        String query = "UPDATE pengguna SET Status_Login=? WHERE ID_Pengguna=?";
+        try(PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, statusLogin);
+            pst.setString(2, idPengguna);
+            pst.executeUpdate();
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
     }
     
     private String generateVerifyCode() throws SQLException{

@@ -12,53 +12,56 @@ import java.util.List;
  */
 public class PemeriksaanSementara {
 
-    public PemeriksaanSementara(List<String> kodeTindakan, List<Integer> biayaTindakanFinal, 
-            List<Integer> potongan, List<Integer> subtotal) {
+    public PemeriksaanSementara(String kodeTindakan, Integer biayaTindakanFinal, Integer potongan, Integer subtotal) {
         this.kodeTindakan = kodeTindakan;
         this.biayaTindakanFinal = biayaTindakanFinal;
         this.potongan = potongan;
         this.subtotal = subtotal;
     }
+
+    
 
     public PemeriksaanSementara() {
     
     }
     
-    private List<String> kodeTindakan;
-    private List<Integer> biayaTindakanFinal;
-    private List<Integer> potongan;
-    private List<Integer> subtotal;
-    
-    
-    public List<String> getKodeTindakan() {
+    private String kodeTindakan;
+    private Integer biayaTindakanFinal;
+    private Integer potongan;
+    private Integer subtotal;
+
+    public String getKodeTindakan() {
         return kodeTindakan;
     }
 
-    public void setKodeTindakan(List<String> kodeTindakan) {
+    public void setKodeTindakan(String kodeTindakan) {
         this.kodeTindakan = kodeTindakan;
     }
 
-    public List<Integer> getBiayaTindakanFinal() {
+    public Integer getBiayaTindakanFinal() {
         return biayaTindakanFinal;
     }
 
-    public void setBiayaTindakanFinal(List<Integer> biayaTindakanFinal) {
+    public void setBiayaTindakanFinal(Integer biayaTindakanFinal) {
         this.biayaTindakanFinal = biayaTindakanFinal;
     }
 
-    public List<Integer> getPotongan() {
+    public Integer getPotongan() {
         return potongan;
     }
 
-    public void setPotongan(List<Integer> potongan) {
+    public void setPotongan(Integer potongan) {
         this.potongan = potongan;
     }
 
-    public List<Integer> getSubtotal() {
+    public Integer getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(List<Integer> subtotal) {
+    public void setSubtotal(Integer subtotal) {
         this.subtotal = subtotal;
-    }  
+    }
+    
+    
+    
 }

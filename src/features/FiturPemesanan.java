@@ -36,7 +36,6 @@ import model.ModelPengguna;
 import util.ModelRenderTable;
 import model.ModelSupplier;
 import model.Sementara;
-import service.ServiceDetailPemesanan;
 import service.ServiceNotifikasi;
 import service.ServicePemesanan;
 import swing.TableCellActionRender;
@@ -59,7 +58,6 @@ public class FiturPemesanan extends javax.swing.JPanel {
     private ModelPengguna modelPengguna;
     private TableRowSorter<DefaultTableModel> rowSorter;
     private ServicePemesanan servicePemesanan = new ServicePemesanan();
-    private ServiceDetailPemesanan serviceDetail = new ServiceDetailPemesanan();
     private ServiceNotifikasi serviceNotifikasi = new ServiceNotifikasi();
     public FiturPemesanan(JFrame parent, ModelPengguna modelPengguna, JButton btnNotif) {
         initComponents();
@@ -210,22 +208,18 @@ public class FiturPemesanan extends javax.swing.JPanel {
         noPemesanan, tglPemesanan, null, null, totalPemesanan,
         bayar, kembalian, jenisPembayaran, modelSupplier, modelPengguna);
         
-        servicePemesanan.addData(parent, modelPemesanan);
-        
     //        Tambah Detail
-        List<String> kodeBrg = new ArrayList<>();
-        List<Integer> hargaBeli = new ArrayList<>();
-        List<Integer> jumlah = new ArrayList<>();
-        List<Integer> subtotal = new ArrayList<>();
         detail.setModelPemesanan(modelPemesanan);
+        List<Sementara> sementara = new ArrayList<>();
         for(int a = 0; a < tableDetail.getRowCount(); a++) {
-            kodeBrg.add((String) tableDetail.getValueAt(a, 0));
-            hargaBeli.add((Integer)tableDetail.getValueAt(a, 3));
-            jumlah.add((Integer) tableDetail.getValueAt(a, 5));
-            subtotal.add((Integer)tableDetail.getValueAt(a, 6));
-            Sementara ps = new Sementara(kodeBrg, hargaBeli,jumlah, subtotal);
-            serviceDetail.addData(detail, ps);
+            String kodeBrg = tableDetail.getValueAt(a, 0).toString();
+            Integer hargaBeli = Integer.parseInt(tableDetail.getValueAt(a, 3).toString());
+            Integer jumlah = Integer.parseInt(tableDetail.getValueAt(a, 5).toString());
+            Integer subtotal = Integer.parseInt(tableDetail.getValueAt(a, 6).toString());
+            sementara.add(new Sementara(kodeBrg, hargaBeli, jumlah, subtotal));
         }
+        
+        servicePemesanan.addData(parent, modelPemesanan, sementara);
     }
     
 //    Tambah Data Sementara
@@ -388,13 +382,13 @@ public class FiturPemesanan extends javax.swing.JPanel {
     }
     
     private void clearAllField() {
-        lbIdSupplier.setText(null);
-        lbNamaSupplier.setText(null);
-        lbKodeBrg.setText(null);
-        lbNamaBrg.setText(null);
-        txtHrgBeliSkrg.setText(null);
+        lbIdSupplier.setText("");
+        lbNamaSupplier.setText("");
+        lbKodeBrg.setText("");
+        lbNamaBrg.setText("");
+        txtHrgBeliSkrg.setText("");
         spnJumlah.setValue((int) 0);
-        lbSubtotal.setText(null);
+        lbSubtotal.setText("");
         lbTotal.setText("0");
         txtBayar.setText("");
         lbKembalian.setText("0");
@@ -402,13 +396,13 @@ public class FiturPemesanan extends javax.swing.JPanel {
     }
     
     private void clearFieldBrg() {
-        lbKodeBrg.setText(null);
-        lbNamaBrg.setText(null);
-        lbSatuan.setText(null);
-        txtHrgBeliSkrg.setText(null);
-        lbHrgBeliSblm.setText(null);
+        lbKodeBrg.setText("");
+        lbNamaBrg.setText("");
+        lbSatuan.setText("");
+        txtHrgBeliSkrg.setText("");
+        lbHrgBeliSblm.setText("");
         spnJumlah.setValue((int) 0);
-        lbSubtotal.setText(null);
+        lbSubtotal.setText("");
     }
 
     /**
@@ -1189,7 +1183,7 @@ public class FiturPemesanan extends javax.swing.JPanel {
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void txtCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariFocusGained
-        txtCari.setText(null);
+        txtCari.setText("");
         txtCari.setForeground(new Color(0,0,0));
         txtCari.setFont(new Font("sansserif",0,14));
         pagination.setVisible(false);

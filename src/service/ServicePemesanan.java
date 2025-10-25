@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -19,6 +20,7 @@ import model.ModelBarang;
 import model.ModelPemesanan;
 import model.ModelPengguna;
 import model.ModelSupplier;
+import model.Sementara;
 import swing.Pagination;
 import swing.StatusType;
 /**
@@ -145,25 +147,54 @@ public class ServicePemesanan {
         }
     }
     
-    public void addData(JFrame parent, ModelPemesanan modelPemesanan) {
-        String query = "INSERT INTO pemesanan (No_Pemesanan, Tanggal_Pemesanan, Status_Pemesanan, Total_Pemesanan, Bayar, Kembali, Jenis_Pembayaran, ID_Supplier, ID_Pengguna) "
+    public void addData(JFrame parent, ModelPemesanan modelPemesanan, List<Sementara> sementara) {
+        String query1 = "INSERT INTO pemesanan (No_Pemesanan, Tanggal_Pemesanan, Status_Pemesanan, Total_Pemesanan, Bayar, Kembali, Jenis_Pembayaran, ID_Supplier, ID_Pengguna) "
                 + "VALUES (?,?,?,?,?,?,?,?,?)";
+        
+        String query2 = "INSERT INTO detail_pemesanan (No_Pemesanan, Kode_Barang, Harga_Beli_Final, Jumlah, Subtotal) VALUES (?,?,?,?,?) ";
         try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, modelPemesanan.getNoPemesanan());
-            pst.setString(2, modelPemesanan.getTglPemesanan());
-            pst.setString(3, "Dikirim");
-            pst.setString(4, modelPemesanan.getTotalPemesanan());
-            pst.setDouble(5, modelPemesanan.getBayar());
-            pst.setDouble(6, modelPemesanan.getKembali());
-            pst.setString(7, modelPemesanan.getJenisPembayaran());
-            pst.setString(8, modelPemesanan.getModelSupplier().getIdSupplier());
-            pst.setString(9, modelPemesanan.getModelPengguna().getIdpengguna());
-            pst.executeUpdate();
-            pst.close();
-            JOptionPane.showMessageDialog(parent, "Pesanan baru telah ditambahkan");
+            connection.setAutoCommit(false);
+            try(PreparedStatement pst = connection.prepareStatement(query1)) {
+                pst.setString(1, modelPemesanan.getNoPemesanan());
+                pst.setString(2, modelPemesanan.getTglPemesanan());
+                pst.setString(3, "Dikirim");
+                pst.setString(4, modelPemesanan.getTotalPemesanan());
+                pst.setDouble(5, modelPemesanan.getBayar());
+                pst.setDouble(6, modelPemesanan.getKembali());
+                pst.setString(7, modelPemesanan.getJenisPembayaran());
+                pst.setString(8, modelPemesanan.getModelSupplier().getIdSupplier());
+                pst.setString(9, modelPemesanan.getModelPengguna().getIdpengguna());
+                pst.executeUpdate();
+            }
+            
+            try(PreparedStatement pst = connection.prepareStatement(query2)) {
+                for(var data : sementara) {
+                    pst.setString(1, modelPemesanan.getNoPemesanan());
+                    pst.setString(2, data.getKodeBrg());
+                    pst.setInt(3, data.getHargaFinal());
+                    pst.setInt(4, data.getJumlah());
+                    pst.setInt(5, data.getSubtotal());
+                    pst.addBatch();
+                }
+                
+                pst.executeBatch();
+            }
+            connection.commit();
+            JOptionPane.showMessageDialog(parent, "Pesanan baru berhasil ditambahkan");
         } catch(Exception ex) {
+            try {
+                connection.rollback();
+                JOptionPane.showMessageDialog(parent, "Terjadi kesalahan saat membuat pesanan baru");
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
             ex.printStackTrace();
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
     }
     

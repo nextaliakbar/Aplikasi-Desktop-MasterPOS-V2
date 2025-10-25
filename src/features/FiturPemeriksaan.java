@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
@@ -68,7 +69,7 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
     private ModelPengguna modelPengguna;
     private TableRowSorter<DefaultTableModel> rowSorter;
     private ServicePemeriksaan servicPemeriksaan = new ServicePemeriksaan();
-    private ServiceDetailPemeriksaan serviceDetail = new ServiceDetailPemeriksaan();
+    private ServiceDetailPemeriksaan serviceDetailPemeriksaan = new ServiceDetailPemeriksaan();
     private final DecimalFormat df = new DecimalFormat("#,##0.##");
     public FiturPemeriksaan(JFrame parent, ModelPengguna modelPengguna) {
         initComponents();
@@ -87,7 +88,8 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
         cariData();
         actionTableMain();
         instanceReport();
-        actionBtnPrint();
+        actionBtnSimpanCetak();
+        actionBtnSimpan();
     }
     
 //  Tampil data
@@ -149,28 +151,18 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
         noPemeriksaan, modelReservasi, tgl, deskripsi, 
         String.valueOf(total()), bayar, kembali, jenisPembayaran, pasien, 
         karyawan, modelPengguna);
-        servicPemeriksaan.addData(parent, pemeriksaan);
         
-//      Tambah Detail
-        List<String> kodeTindakan = new ArrayList<>();
-        List<Integer> biayaTindakanFinal = new ArrayList<>();
-        List<Integer> potongan = new ArrayList<>();
-        List<Integer> totalHarga = new ArrayList<>();
-        
-        detail.setModelPemeriksaan(pemeriksaan);
+//      Tambah Detail        
+        List<PemeriksaanSementara> pemeriksaanSementara = new ArrayList<>();
         for(int a = 0; a < tabmodel2.getRowCount(); a++) {
-            kodeTindakan.add((String) tableDetail.getValueAt(a, 1));
-            biayaTindakanFinal.add((Integer) tableDetail.getValueAt(a, 3));
-            potongan.add((Integer) tableDetail.getValueAt(a, 4));
-            totalHarga.add((Integer) tableDetail.getValueAt(a, 5));
-            
-            PemeriksaanSementara
-                    ps = new PemeriksaanSementara(kodeTindakan, biayaTindakanFinal, 
-                            potongan, totalHarga);
-            serviceDetail.addData(detail, ps);
+            String kodeTindakan = tableDetail.getValueAt(a, 1).toString();
+            Integer biayaTindakanFinal = Integer.parseInt(tableDetail.getValueAt(a, 3).toString());
+            Integer potongan = Integer.parseInt(tableDetail.getValueAt(a, 4).toString());
+            Integer subtotal = Integer.parseInt(tableDetail.getValueAt(a, 5).toString());
+            pemeriksaanSementara.add(new PemeriksaanSementara(kodeTindakan, biayaTindakanFinal, potongan, subtotal));
         }
         
-        tabmodel2.setRowCount(0);
+        servicPemeriksaan.addData(parent, pemeriksaan, pemeriksaanSementara);
     }
     
     
@@ -271,17 +263,11 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
 //      Print pemeriksaan
     private void printPemeriksaan() {
         try {
-        List<FieldsPemeriksaan> fields = new ArrayList<>();
-        for(int a = 0; a < tableDetail.getRowCount(); a++) {
-            ModelDetailPemeriksaan pemeriksaan = (ModelDetailPemeriksaan) tableDetail.getValueAt(a, 0);
-            fields.add(new FieldsPemeriksaan(pemeriksaan.getModelTindakan().getKodeTindakan(), 
-            df.format(pemeriksaan.getModelTindakan().getBiaya()), df.format(pemeriksaan.getPotongan()), 
-            df.format(pemeriksaan.getSubtotal())));
-        }
             String noPemeriksaan = lbNoPemeriksaan.getText();
+            List<FieldsPemeriksaan> fields = serviceDetailPemeriksaan.getData(noPemeriksaan);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate date = LocalDate.parse(lbTgl.getText(), formatter);
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd - MMMM - yyyy");
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd - MMMM - yyyy", new Locale("id", "ID"));
             String tglPemeriksaan = format.format(date);
             Date dateNow = new Date();
             String jamPemeriksaan = new SimpleDateFormat("HH:mm").format(dateNow) + " WIB";
@@ -302,7 +288,7 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(parent, ex.getMessage(), "Peringatan", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
+        
     
 //  Update,Delete,Detail Table Main
     private void actionTableMain() {
@@ -460,7 +446,6 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         lbRp = new javax.swing.JLabel();
         lbTotal = new javax.swing.JLabel();
-        btnPrint = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         txtBayar = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
@@ -503,6 +488,7 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
         btnBatal = new swing.Button();
         btnSimpan = new swing.Button();
         lbIdPasien1 = new javax.swing.JLabel();
+        btnSimpanCetak = new swing.Button();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new java.awt.CardLayout());
@@ -730,19 +716,6 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
         lbTotal.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lbTotal.setText("0");
 
-        btnPrint.setBackground(new java.awt.Color(135, 15, 50));
-        btnPrint.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        btnPrint.setForeground(new java.awt.Color(255, 255, 255));
-        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/printerwhite.png"))); // NOI18N
-        btnPrint.setText("F1");
-        btnPrint.setBorder(null);
-        btnPrint.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnPrint.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrintActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -754,23 +727,17 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
                 .addComponent(lbRp)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnPrint)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPrint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbRp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbRp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel17.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
@@ -804,7 +771,7 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(lbKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 112, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -849,11 +816,12 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel3Layout.createSequentialGroup()
+                                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(12, 12, 12))
+                            .addGroup(panel3Layout.createSequentialGroup()
                                 .addComponent(txtBayar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx_jenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(12, 12, 12)))
+                                .addComponent(cbx_jenisPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         panel3Layout.setVerticalGroup(
@@ -1199,7 +1167,7 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
         });
 
         btnSimpan.setForeground(new java.awt.Color(135, 15, 50));
-        btnSimpan.setText("SIMPAN");
+        btnSimpan.setText("F2 | SIMPAN");
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSimpanActionPerformed(evt);
@@ -1209,6 +1177,14 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
         lbIdPasien1.setBackground(new java.awt.Color(135, 15, 50));
         lbIdPasien1.setForeground(new java.awt.Color(135, 15, 50));
 
+        btnSimpanCetak.setForeground(new java.awt.Color(135, 15, 50));
+        btnSimpanCetak.setText("F1 | SIMPAN & Cetak");
+        btnSimpanCetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpanCetakActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -1216,10 +1192,12 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lbIdPasien1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 922, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSimpanCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(11, 11, 11))
@@ -1231,7 +1209,8 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label1)
                     .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSimpanCetak, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(13, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1282,7 +1261,7 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void txtCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariFocusGained
-        txtCari.setText(null);
+        txtCari.setText("");
         txtCari.setForeground(new Color(0,0,0));
         txtCari.setFont(new Font("sansserif",0,14));
         pagination.setVisible(false);
@@ -1305,11 +1284,12 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         if(validation()) {
-        tambahData();
-        tabmodel1.setRowCount(0);
-        clearField();
-        changePanel(panelData);
-        tampilData();
+            tambahData();
+            tabmodel2.setRowCount(0);
+            tabmodel1.setRowCount(0);
+            clearField();
+            changePanel(panelData);
+            tampilData();
         }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
@@ -1350,12 +1330,6 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_cbxNoReservasiActionPerformed
 
-    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        if(validation()) {
-            printPemeriksaan();    
-        }
-    }//GEN-LAST:event_btnPrintActionPerformed
-
     private void txtPotonganKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPotonganKeyReleased
         String member = txtPotongan.getText();
         if(member.trim().length() > 0) {
@@ -1366,7 +1340,7 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
     }//GEN-LAST:event_txtPotonganKeyReleased
 
     private void txtPotonganFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPotonganFocusGained
-        txtPotongan.setText(null);
+        txtPotongan.setText("");
         txtPotongan.setFont(new Font("sansserif", Font.PLAIN, 20));
         txtPotongan.setHorizontalAlignment(JTextField.CENTER);
         txtPotongan.setForeground(new Color(0, 0, 0));
@@ -1414,14 +1388,49 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
     private void txtPotonganKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPotonganKeyPressed
         lbIdPasien2.setText(txtPotongan.getText());    
     }//GEN-LAST:event_txtPotonganKeyPressed
+
+    private void btnSimpanCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanCetakActionPerformed
+        if(validation()) {
+            tambahData();
+            printPemeriksaan();
+            tabmodel2.setRowCount(0);
+            tabmodel1.setRowCount(0);
+            clearField();
+            changePanel(panelData);
+            tampilData();
+        }
+    }//GEN-LAST:event_btnSimpanCetakActionPerformed
     
-    private void actionBtnPrint() {
-        btnPrint.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F1"), "F1Pressed");
-        btnPrint.getActionMap().put("F1Pressed", new AbstractAction() {
+    private void actionBtnSimpanCetak() {
+        btnSimpanCetak.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F1"), "F1Pressed");
+        btnSimpanCetak.getActionMap().put("F1Pressed", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(validation()) {
-                    printPemeriksaan();    
+                    tambahData();
+                    printPemeriksaan();
+                    tabmodel2.setRowCount(0);
+                    tabmodel1.setRowCount(0);
+                    clearField();
+                    changePanel(panelData);
+                    tampilData();
+                }
+            }
+        });
+    }
+    
+    private void actionBtnSimpan() {
+        btnSimpan.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F2"), "F2Pressed");
+        btnSimpan.getActionMap().put("F2Pressed", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(validation()) {
+                    tambahData();
+                    tabmodel2.setRowCount(0);
+                    tabmodel1.setRowCount(0);
+                    clearField();
+                    changePanel(panelData);
+                    tampilData();
                 }
             }
         });
@@ -1435,10 +1444,10 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
     }
     
     private void clearField() {
-        lbTgl.setText(null);
-        lbNamaPasien.setText(null);
-        lbIdKaryawan.setText(null);
-        lbNamaKaryawan.setText(null);
+        lbTgl.setText("");
+        lbNamaPasien.setText("");
+        lbIdKaryawan.setText("");
+        lbNamaKaryawan.setText("");
         lbTotal.setText(String.valueOf(0));
         txtBayar.setText("");
         lbKembali.setText("0");
@@ -1447,9 +1456,9 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
     }
     
     private void clearFieldTindakan() {
-        lbKodeTindakan.setText(null);
-        lbNamaTindakan.setText(null);
-        lbHarga.setText(null);
+        lbKodeTindakan.setText("");
+        lbNamaTindakan.setText("");
+        lbHarga.setText("");
         viewCheck("Klik disini dan Scan Kartu Member", txtPotongan, 14);
         txtPotongan.setEnabled(true);
         tabEnter.setText("Tab Enter");
@@ -1532,8 +1541,8 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
     private swing.Button btnBatal;
     private swing.Button btnPilih1;
     private swing.Button btnPilih2;
-    private javax.swing.JButton btnPrint;
     private swing.Button btnSimpan;
+    private swing.Button btnSimpanCetak;
     private swing.Button btnTambah;
     private swing.Button btnTambahSementara;
     private javax.swing.JComboBox<String> cbxNoReservasi;

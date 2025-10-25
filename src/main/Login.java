@@ -40,12 +40,12 @@ public class Login extends javax.swing.JFrame {
         this.parent = this;
         Koneksi.setupDatabase();
         serviceLogin = new ServiceLogin();
-        setIconImage(new ImageIcon(getClass().getResource("/image/Master Pos Logo 3.png")).getImage());
         initiation();
     }
     
     private void initiation() {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setIconImage(new ImageIcon(getClass().getResource("/image/Master Pos Logo 3.png")).getImage());
         TimingTarget targetLogin = new TimingTargetAdapter() {
             @Override
             public void timingEvent(float fraction) {
@@ -550,7 +550,13 @@ public class Login extends javax.swing.JFrame {
         FlatMacLightLaf.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                ServiceLogin serviceLogin = new ServiceLogin();
+                if(serviceLogin.getPenggunaByStatusLogin() != null) {
+                    Main main = new Main(serviceLogin.getPenggunaByStatusLogin());
+                    main.setVisible(true);
+                } else {
+                    new Login().setVisible(true);
+                }
             }
         });
     }

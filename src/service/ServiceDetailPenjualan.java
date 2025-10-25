@@ -3,13 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package service;
+import control.FieldsPemeriksaan;
+import control.FieldsPenjualan;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import model.ModelDetailPenjualan;
-import model.Sementara;
 /**
  *
  * @author usER
@@ -54,33 +57,26 @@ public class ServiceDetailPenjualan {
         }
     }
     
-    public void addData(ModelDetailPenjualan modelDetail, Sementara ps) {
-        String query = "INSERT INTO detail_penjualan (No_Penjualan, Kode_Barang, Harga_Jual_Final, Jumlah, Subtotal) VALUES (?,?,?,?,?) ";
-        try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, modelDetail.getModelPenjualan().getNoPenjualan());
-
-            for(String kodeBrg : ps.getKodeBrg()) {
-                pst.setString(2, kodeBrg);
+    public List<FieldsPenjualan> getData(String noPenjualan) {
+        String query = "SELECT dtl.Harga_Jual_Final, brg.Nama_Barang,"
+                + "dtl.Jumlah, dtl.Subtotal FROM detail_penjualan dtl JOIN barang brg "
+                + "ON dtl.Kode_Barang=brg.Kode_Barang WHERE No_Penjualan='"+noPenjualan+"' ";
+        List<FieldsPenjualan> fields = new ArrayList<>();
+        try(PreparedStatement pst = connection.prepareStatement(query);
+                ResultSet rst = pst.executeQuery()) {
+            
+            while(rst.next()) {
+                String product = rst.getString("Nama_Barang");
+                String price = rst.getString("Harga_Jual_Final");
+                Integer qty = rst.getInt("Jumlah");
+                String subtotal = rst.getString("Subtotal");
+                fields.add(new FieldsPenjualan(product, df.format(Integer.parseInt(price)), qty, df.format(Integer.parseInt(subtotal))));
+                
             }
-            
-            for(int hargaJual : ps.getHargaFinal()) {
-                pst.setInt(3, hargaJual);
-            }
-            
-            
-            for(int jumlah : ps.getJumlah()) {
-                pst.setInt(4, jumlah);
-            }
-            
-            for(int subtotal : ps.getSubtotal()) {
-                pst.setInt(5, subtotal);
-            }
-            
-            pst.executeUpdate();
-            pst.close();
         } catch(Exception ex) {
             ex.printStackTrace();
         }
+        
+        return fields;
     }
 }

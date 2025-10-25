@@ -120,7 +120,7 @@ public class FiturSupplier extends javax.swing.JPanel {
         ModelSupplier modelSupplier = new ModelSupplier();
         modelSupplier.setIdSupplier(IdSupplier);
         if(serviceSupplier.validationDelete(parent, modelSupplier)) {
-            int confirm = JOptionPane.showConfirmDialog(null, "Yakin ingin menghapus pasien ini?", 
+            int confirm = JOptionPane.showConfirmDialog(null, "Yakin ingin menghapus supplier ini?", 
         "Konfirmasi", JOptionPane.YES_NO_OPTION);
                 if(confirm == JOptionPane.YES_OPTION) {
                 if(table.isEditing()) {
