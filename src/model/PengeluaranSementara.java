@@ -12,44 +12,42 @@ import java.util.List;
  */
 public class PengeluaranSementara {
 
-    public PengeluaranSementara(List<String> noJenis, List<String> detailJenis, List<Integer> subtotal) {
+    public PengeluaranSementara(String noJenis, String detailJenis, Integer subtotal) {
         this.noJenis = noJenis;
         this.detailJenis = detailJenis;
         this.subtotal = subtotal;
     }
-
 
     public PengeluaranSementara() {
     }
     
-    private List<String> noJenis;
-    private List<String> detailJenis;
-    private List<Integer> subtotal;
+    private String noJenis;
+    private String detailJenis;
+    private Integer subtotal;
 
-    public List<String> getNoJenis() {
+    public String getNoJenis() {
         return noJenis;
     }
 
-    public void setNoJenis(List<String> noJenis) {
+    public void setNoJenis(String noJenis) {
         this.noJenis = noJenis;
     }
 
-    public List<String> getDetailJenis() {
+    public String getDetailJenis() {
         return detailJenis;
     }
 
-    public void setDetailJenis(List<String> detailJenis) {
+    public void setDetailJenis(String detailJenis) {
         this.detailJenis = detailJenis;
     }
 
-    public List<Integer> getSubtotal() {
+    public Integer getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(List<Integer> subtotal) {
+    public void setSubtotal(Integer subtotal) {
         this.subtotal = subtotal;
     }
-    
     
     
 }

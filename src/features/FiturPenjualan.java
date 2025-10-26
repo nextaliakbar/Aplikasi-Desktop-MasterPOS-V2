@@ -327,7 +327,7 @@ public class FiturPenjualan extends javax.swing.JPanel {
         int rowCount = tableDetail.getRowCount();
         String kodeBrg = lbKodeBrg.getText();            
         try {
-            if(lbNoBarcode.getText().trim().length() == 0 ) {
+            if(lbNoBarcode.getText().isBlank()) {
                 valid = false;
                 JOptionPane.showMessageDialog(parent, "Silahkan Pilih Barang");
             } else if(jumlah <= 0) {
@@ -357,7 +357,7 @@ public class FiturPenjualan extends javax.swing.JPanel {
         try {
             if(tableDetail.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(parent, "Silahkan Pilih Barang");       
-            } else if(txtBayar.getText().trim().length() == 0) {
+            } else if(txtBayar.getText().isBlank()) {
                 JOptionPane.showMessageDialog(parent, "Silahkan masukkan jumlah pembayaran");
             } else if(Double.parseDouble(txtBayar.getText()) < total()) {
                 JOptionPane.showMessageDialog(parent, "Jumlah Pembayaran Kurang dari Total Penjualan");    

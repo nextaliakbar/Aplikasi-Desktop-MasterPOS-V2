@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -101,20 +102,47 @@ public class ServicePengeluaran {
         }
     }
     
-    public void addDataPengeluaran(JFrame parent, ModelPengeluaran modelPengeluaran) {
-        String query = "INSERT INTO pengeluaran(No_Pengeluaran, Tanggal_Pengeluaran, Total_Pengeluaran, Deskripsi, ID_Pengguna) VALUES (?,?,?,?,?)";
+    public void addDataPengeluaran(JFrame parent, ModelPengeluaran modelPengeluaran, List<PengeluaranSementara> pengeluaranSementara) {
+        String query1 = "INSERT INTO pengeluaran(No_Pengeluaran, Tanggal_Pengeluaran, Total_Pengeluaran, Deskripsi, ID_Pengguna) VALUES (?,?,?,?,?)";
+        String query2 = "INSERT INTO detail_pengeluaran(No_Pengeluaran, No_Jenis, Detail_Jenis, Subtotal) VALUES(?,?,?,?)";
         try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, modelPengeluaran.getNoPengeluaran());
-            pst.setString(2, modelPengeluaran.getTglPengeluaran());
-            pst.setString(3, modelPengeluaran.getTotal());
-            pst.setString(4, modelPengeluaran.getDeskripsi());
-            pst.setString(5, modelPengeluaran.getModelPengguna().getIdpengguna());
-            pst.executeUpdate();
-            pst.close();
-            JOptionPane.showMessageDialog(parent, "Data Berhasil Ditambahkan");
+            connection.setAutoCommit(false);
+            try(PreparedStatement pst = connection.prepareStatement(query1)) {
+                pst.setString(1, modelPengeluaran.getNoPengeluaran());
+                pst.setString(2, modelPengeluaran.getTglPengeluaran());
+                pst.setString(3, modelPengeluaran.getTotal());
+                pst.setString(4, modelPengeluaran.getDeskripsi());
+                pst.setString(5, modelPengeluaran.getModelPengguna().getIdpengguna());
+                pst.executeUpdate();
+            }
+            
+            try(PreparedStatement pst = connection.prepareStatement(query2)) {
+                for(var data : pengeluaranSementara) {
+                    pst.setString(1, modelPengeluaran.getNoPengeluaran());
+                    pst.setString(2, data.getNoJenis());
+                    pst.setString(3, data.getDetailJenis());
+                    pst.setInt(4, data.getSubtotal());
+                    pst.addBatch();
+                }
+                
+                pst.executeBatch();
+            }
+            connection.commit();
+            JOptionPane.showMessageDialog(parent, "Pengeluaran baru berhasil ditambahkan");
         } catch(Exception ex) {
+            try {
+                connection.rollback();
+                JOptionPane.showMessageDialog(parent, "Terjadi kesalahan saat membuat pengeluaran baru");
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
             ex.printStackTrace();
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -160,31 +188,7 @@ public class ServicePengeluaran {
         
         return noJenis;
     }
-    
-    public void addDataDetail(ModelDetailPengeluaran modelDetail, PengeluaranSementara sementara) {
-        String query = "INSERT INTO detail_pengeluaran(No_Pengeluaran, No_Jenis, Detail_Jenis, Subtotal) VALUES(?,?,?,?)";
-        try {
-            PreparedStatement pst = connection.prepareStatement(query);
-            
-            pst.setString(1, modelDetail.getModelPengeluaran().getNoPengeluaran());
-            for(String noJenis : sementara.getNoJenis()) {
-                pst.setString(2, noJenis);
-            }
-            
-            for(String detailJenis : sementara.getDetailJenis()) {
-                pst.setString(3, detailJenis);
-            }
-            
-            for(int subtotal : sementara.getSubtotal()) {
-                pst.setInt(4, subtotal);
-            }
-            pst.executeUpdate();
-            pst.close();
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-    
+        
     public void loadDataDetail(ModelDetailPengeluaran modelDetail, DefaultTableModel tabmodel) {
         String query = "SELECT dtl.No_Pengeluaran, dtl.No_Jenis, jns.Nama_Jenis, "
                 + "dtl.Detail_Jenis, dtl.Subtotal FROM detail_pengeluaran dtl "

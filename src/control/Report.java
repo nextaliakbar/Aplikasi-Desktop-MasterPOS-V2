@@ -46,7 +46,7 @@ public class Report {
                 break;
             default:
                 switch(slide) {
-                case "Kartu Karyawan": 
+                case "Kartu Karyawan":
                     report1 = JasperCompileManager.compileReport(getClass().getResourceAsStream("/report/KartuKaryawan.jrxml"));
                     break;
                 case "Kartu Membership": 

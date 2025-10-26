@@ -480,7 +480,7 @@ public class TambahPemesanan extends java.awt.Dialog {
      */
     
     private void focusGained(JTextField txtField) {
-        txtField.setText(null);
+        txtField.setText("");
         txtField.setFont(new Font("sansserif", 0, 14));
         txtField.setForeground(new Color(0, 0,0));
     }

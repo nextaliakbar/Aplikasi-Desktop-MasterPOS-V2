@@ -525,7 +525,7 @@ public class FiturPasien extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void txtCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariFocusGained
-        txtCari.setText(null);
+        txtCari.setText("");
         txtCari.setForeground(new Color(0,0,0));
         txtCari.setFont(new Font("sansserif",0,14));
     }//GEN-LAST:event_txtCariFocusGained
@@ -671,15 +671,15 @@ public class FiturPasien extends javax.swing.JPanel {
     
     private boolean validation() {
         boolean valid = false;
-        if(t_idPasien.getText().isEmpty()) {
+        if(t_idPasien.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "ID Pasien tidak boleh kosong");
-        } else if(t_nama.getText().isEmpty()) {
+        } else if(t_nama.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Nama Pasien tidak boleh kosong");
-        } else if(t_no_Telp.getText().isEmpty()) {
+        } else if(t_no_Telp.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "No Telepon tidak boleh kosong");
-        } else if(t_alamat.getText().isEmpty()) {
+        } else if(t_alamat.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Alamat tidak boleh kosong");
-        } else if(!t_email.getText().isEmpty()) {
+        } else if(!t_email.getText().isBlank()) {
             String REGEX_EMAIL = "[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
             Pattern pattern = Pattern.compile(REGEX_EMAIL);
             Matcher matcher = pattern.matcher(t_email.getText());
@@ -697,10 +697,10 @@ public class FiturPasien extends javax.swing.JPanel {
     }
     
     private void clearField() {
-        t_idPasien.setText(null);
-        t_nama.setText(null);
-        t_no_Telp.setText(null);
-        t_alamat.setText(null);
-        t_email.setText(null);
+        t_idPasien.setText("");
+        t_nama.setText("");
+        t_no_Telp.setText("");
+        t_alamat.setText("");
+        t_email.setText("");
     }
 }

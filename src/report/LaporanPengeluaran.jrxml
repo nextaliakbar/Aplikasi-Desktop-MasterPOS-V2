@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportPemeriksaan" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0a185fa4-375d-4b81-95e3-6ddfe2d8b6fa">
 	<property name="ireport.zoom" value="2.5937424601000583"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="518"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
@@ -15,7 +15,7 @@
 	</style>
 	<subDataset name="data" uuid="c54230cd-2542-46e6-a67f-8cb4751322b9">
 		<field name="type" class="java.lang.String"/>
-		<field name="detail" class="java.lang.String"/>
+		<field name="detailType" class="java.lang.String"/>
 		<field name="subtotal" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="rentang" class="java.lang.String"/>
@@ -242,7 +242,7 @@
 			<componentElement>
 				<reportElement key="table" style="table" positionType="Float" stretchType="RelativeToTallestObject" x="342" y="0" width="213" height="14" isPrintWhenDetailOverflows="true" uuid="42dc44dd-68af-49da-90b2-72cedf461de3"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="data" uuid="7634e0f6-3ffc-4f46-bd03-38534c541c25">
+					<datasetRun subDataset="data" uuid="db27f062-c57f-4bcd-85fb-c43c99fc4f41">
 						<dataSourceExpression><![CDATA[$F{detail}]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="77" uuid="50420ff4-87bd-4699-b9a9-582affe13563">
@@ -265,17 +265,11 @@
 					<jr:column width="80" uuid="f49a7932-61d3-4a5b-8f98-3aa330bb98a4">
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="80" height="20" uuid="52a303e1-275e-47b2-a007-b036d23618d3"/>
-								<box>
-									<topPen lineWidth="0.5"/>
-									<leftPen lineWidth="0.5"/>
-									<bottomPen lineWidth="0.5"/>
-									<rightPen lineWidth="0.5"/>
-								</box>
+								<reportElement x="0" y="0" width="80" height="20" uuid="0de52550-5911-4ed4-91a8-594f0f174372"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{detail}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{detailType}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

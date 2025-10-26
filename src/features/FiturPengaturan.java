@@ -798,7 +798,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
     }//GEN-LAST:event_cbxJenisPromoActionPerformed
 
     private void txtPromoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPromoFocusGained
-        txtPromo.setText(null);
+        txtPromo.setText("");
         txtPromo.setForeground(new Color(0, 0, 0));
         txtPromo.setFont(new Font("sansserif", Font.PLAIN, 20));       
     }//GEN-LAST:event_txtPromoFocusGained
@@ -929,7 +929,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
         String namaPromo = txtNamaPromo.getText();
         String tglAwal = lb_tglAwal.getText();
         String tglAkhir = lb_tglAkhir.getText();
-        String jenis = null;
+        String jenis = "";
         String keterangan;
         
         LocalDate thisDate = LocalDate.now();
@@ -975,8 +975,8 @@ public class FiturPengaturan extends javax.swing.JPanel {
         ModelPromo promo = new ModelPromo(noPromosi, namaPromo, tglAwal, tglAkhir, banyak, jenis, keterangan);
         if(validation(promo)) {
             servicePromo.addPromo(parent, promo);   
-            txtNamaPromo.setText(null);
-            txtPromo.setText(null);
+            txtNamaPromo.setText("");
+            txtPromo.setText("");
         } else {
             JOptionPane.showMessageDialog(parent, "Terdapat Promo yang Sedang Berjalan");
         }

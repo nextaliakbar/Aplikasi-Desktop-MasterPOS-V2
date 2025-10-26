@@ -384,7 +384,7 @@ public class FiturAbsensi extends javax.swing.JPanel {
     }//GEN-LAST:event_txtIdKaryawanActionPerformed
 
     private void txtIdKaryawanFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdKaryawanFocusGained
-        txtIdKaryawan.setText(null);
+        txtIdKaryawan.setText("");
         txtIdKaryawan.setFont(new Font("sansserif", 0, 20));
         txtIdKaryawan.setForeground(new Color(0, 0, 0));
     }//GEN-LAST:event_txtIdKaryawanFocusGained

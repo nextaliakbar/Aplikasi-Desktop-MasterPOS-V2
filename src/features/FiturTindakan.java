@@ -425,7 +425,7 @@ public class FiturTindakan extends javax.swing.JPanel {
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void txtCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariFocusGained
-        txtCari.setText(null);
+        txtCari.setText("");
         txtCari.setForeground(new Color(0,0,0));
         txtCari.setFont(new Font("sansserif",0,14));
     }//GEN-LAST:event_txtCariFocusGained
@@ -584,11 +584,11 @@ public class FiturTindakan extends javax.swing.JPanel {
     
     private boolean validation() {
         boolean valid = false;
-        if(t_kodeTindakan.getText().isEmpty()) {
+        if(t_kodeTindakan.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Kode Tindakan tidak boleh kosong");
-        } else if(t_namaTindakan.getText().isEmpty()) {
+        } else if(t_namaTindakan.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Nama Tindakan tidak boleh kosong");
-        } else if(t_biaya.getText().isEmpty()) {
+        } else if(t_biaya.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Biaya tidak boleh kosong");
         } else {
             valid = true;
@@ -598,9 +598,9 @@ public class FiturTindakan extends javax.swing.JPanel {
     }
     
     private void clearField() {
-        t_kodeTindakan.setText(null);
-        t_namaTindakan.setText(null);
-        t_biaya.setText(null);
+        t_kodeTindakan.setText("");
+        t_namaTindakan.setText("");
+        t_biaya.setText("");
     }
 }
 

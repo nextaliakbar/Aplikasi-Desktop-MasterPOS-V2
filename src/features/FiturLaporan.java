@@ -922,7 +922,7 @@ public class FiturLaporan extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariFocusGained
-        txtCari.setText(null);
+        txtCari.setText("");
         txtCari.setForeground(new Color(0,0,0));
         txtCari.setFont(new Font("sansserif",0,14));
     }//GEN-LAST:event_txtCariFocusGained

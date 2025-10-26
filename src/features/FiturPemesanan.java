@@ -284,10 +284,10 @@ public class FiturPemesanan extends javax.swing.JPanel {
         int jumlah = (int) spnJumlah.getValue();
         int rowCount = tableDetail.getRowCount();
         try {
-            if(lbKodeBrg.getText().trim().length() == 0 ) {
+            if(lbKodeBrg.getText().isBlank() ) {
                 valid = false;
                 JOptionPane.showMessageDialog(parent, "Silahkan Pilih Barang");
-            } else if(txtHrgBeliSkrg.getText().trim().length() == 0) {
+            } else if(txtHrgBeliSkrg.getText().isBlank()) {
                 valid = false;
                 JOptionPane.showMessageDialog(parent, "Silahkan Masukkan Harga Beli");
             } else if(jumlah <= 0) {
@@ -317,11 +317,11 @@ public class FiturPemesanan extends javax.swing.JPanel {
     private boolean validation() {
         boolean valid = false;
         try {
-            if(lbIdSupplier.getText().trim().length() == 0) {
+            if(lbIdSupplier.getText().isBlank()) {
                 JOptionPane.showMessageDialog(parent, "Silahkan Pilih Supplier");
             } else if(tableDetail.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(parent, "Silahkan Pilih Barang");       
-            } else if(txtBayar.getText().trim().length() == 0) {
+            } else if(txtBayar.getText().isBlank()) {
                 JOptionPane.showMessageDialog(parent, "Silahkan masukkan jumlah pembayaran");
             } else if(Double.parseDouble(txtBayar.getText()) < total()) {
                 JOptionPane.showMessageDialog(parent, "Jumlah Pembayaran Kurang dari Total Pemesanan");    

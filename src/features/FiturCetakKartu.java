@@ -148,15 +148,15 @@ public class FiturCetakKartu extends javax.swing.JPanel {
     }
     
     private void clearField() {
-        txtId.setText(null);
-        txtNama.setText(null);
-        txtJabatan.setText(null);
+        txtId.setText("");
+        txtNama.setText("");
+        txtJabatan.setText("");
     }
     
     private boolean validation() {
         boolean valid = false;
         
-        if(txtId.getText().isEmpty()) {
+        if(txtId.getText().isBlank()) {
             String index = (String) cbxJenisKartu.getSelectedItem();
             switch(index) {
                 case "Kartu Karyawan": 
@@ -355,7 +355,7 @@ public class FiturCetakKartu extends javax.swing.JPanel {
 
     private void btnPilihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPilihActionPerformed
         String slide = (String) cbxJenisKartu.getSelectedItem();
-        PilihCetakKartu pilih = new PilihCetakKartu(null, true, slide);
+        PilihCetakKartu pilih = new PilihCetakKartu(parent, true, slide);
         pilih.setVisible(true);
         switch(slide) {
             case "Kartu Karyawan":

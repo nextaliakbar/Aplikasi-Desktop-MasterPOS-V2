@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Random;
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -772,7 +771,7 @@ public class FiturBarang extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void txtCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariFocusGained
-        txtCari.setText(null);
+        txtCari.setText("");
         txtCari.setForeground(new Color(0,0,0));
         txtCari.setFont(new Font("sansserif",0,20));
     }//GEN-LAST:event_txtCariFocusGained
@@ -806,7 +805,7 @@ public class FiturBarang extends javax.swing.JPanel {
             setShowFieldAddJenis(true, true, true);
             t_tambahJenisBarang.setText("Tambah Jenis Barang");
             t_tambahJenisBarang.setForeground(new Color(185, 185, 185));
-            t_kodeBarang.setText(null);
+            t_kodeBarang.setText("");
         }
     }//GEN-LAST:event_cbx_jenisBarangActionPerformed
 
@@ -1103,14 +1102,7 @@ public class FiturBarang extends javax.swing.JPanel {
             t_kodeBarang.setText("");
         }
     }
-    
-    private void tampilSatuan() {
-        String[] jenisSatuan = {"Pcs","Gram","Butir","Kaleng"};
-        for(String satuan : jenisSatuan) {
-            cbx_satuan.addItem(satuan);
-        }
-    }
-        
+            
     private void cariData() {
         txtCari.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -1143,13 +1135,13 @@ public class FiturBarang extends javax.swing.JPanel {
     private boolean validation() {
         boolean valid = false;
         int stok = (int) spn_stok.getValue();
-        if(t_kodeBarang.getText().isEmpty()) {
+        if(t_kodeBarang.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Kode Barang tidak boleh kosong");
-        } else if(t_namaBarang.getText().isEmpty()) {
+        } else if(t_namaBarang.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Nama Barang tidak boleh kosong");   
-        } else if(t_hargaBeli.getText().isEmpty()) {
+        } else if(t_hargaBeli.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Harga Beli tidak boleh kosong");             
-        } else if(t_hargaJual.getText().isEmpty()) {
+        } else if(t_hargaJual.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Harga Jual tidak boleh kosong");   
         } else if(stok == 0) {
             JOptionPane.showMessageDialog(parent, "Stok harus di isi");   
@@ -1161,11 +1153,11 @@ public class FiturBarang extends javax.swing.JPanel {
     }
     
     private void clearField() {
-        t_noBarcode.setText(null);
-        t_kodeBarang.setText(null);
-        t_namaBarang.setText(null);
-        t_hargaBeli.setText(null);
-        t_hargaJual.setText(null);
+        t_noBarcode.setText("");
+        t_kodeBarang.setText("");
+        t_namaBarang.setText("");
+        t_hargaBeli.setText("");
+        t_hargaJual.setText("");
         spn_stok.setValue(0);
     }
         

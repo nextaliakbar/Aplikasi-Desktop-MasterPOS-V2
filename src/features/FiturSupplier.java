@@ -166,13 +166,13 @@ public class FiturSupplier extends javax.swing.JPanel {
     private boolean validation(){
         boolean valid = false;
         
-        if(TFIdSupplier.getText().isEmpty()){
+        if(TFIdSupplier.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "ID Supplier Tidak Boleh Kosong");
-        }else if (TFNama.getText().isEmpty()){
+        }else if (TFNama.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Nama Supplier Tidak Boleh Kosong");
-        }else if (TFNoTelepon.getText().isEmpty()){
+        }else if (TFNoTelepon.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "No Telepon Supplier Tidak Boleh Kosong");
-        }else if (!TFEmail.getText().isEmpty()){
+        }else if (!TFEmail.getText().isBlank()){
             String REGEX_EMAIL = "[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
             Pattern pattern = Pattern.compile(REGEX_EMAIL);
             Matcher matcher = pattern.matcher(TFEmail.getText());
@@ -182,7 +182,7 @@ public class FiturSupplier extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(parent, "Format email harus dalam bentuk email\n"
                     + "Contoh : email@gmail.com");  
             }
-        }else if (TFAlamat.getText().isEmpty()){
+        }else if (TFAlamat.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Alamat Supplier Tidak Boleh Kosong");   
         }else{
             valid = true;
@@ -192,11 +192,11 @@ public class FiturSupplier extends javax.swing.JPanel {
     }
     
     private void clearField(){
-        TFIdSupplier.setText(null);
-        TFNama.setText(null);
-        TFNoTelepon.setText(null);
-        TFEmail.setText(null);
-        TFAlamat.setText(null);
+        TFIdSupplier.setText("");
+        TFNama.setText("");
+        TFNoTelepon.setText("");
+        TFEmail.setText("");
+        TFAlamat.setText("");
     }
        
     /**

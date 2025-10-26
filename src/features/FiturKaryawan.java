@@ -155,15 +155,15 @@ public class FiturKaryawan extends javax.swing.JPanel {
      
      private boolean validation(){
         boolean valid = false;
-        if(TFIdKaryawan.getText().isEmpty()){
+        if(TFIdKaryawan.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "ID Karyawan Tidak Boleh Kosong");
-        }else if (TFNamaKaryawan.getText().isEmpty()){
+        }else if (TFNamaKaryawan.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Nama Karyawan Tidak Boleh Kosong");
-        }else if (TFTeleponKaryawan.getText().isEmpty()){
+        }else if (TFTeleponKaryawan.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "No Telepon Karyawan Tidak Boleh Kosong");
-        }else if (TFEmailKaryawan.getText().isEmpty()){
+        }else if (TFEmailKaryawan.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Email Karyawan Tidak Boleh Kosong");
-        }else if (TFAlamatKaryawan.getText().isEmpty()){
+        }else if (TFAlamatKaryawan.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Alamat Karyawan Tiddak Boleh Kosong");   
         }else{
             valid = true;
@@ -172,11 +172,11 @@ public class FiturKaryawan extends javax.swing.JPanel {
         return valid;
     }
      private void clearField(){
-        TFIdKaryawan.setText(null);
-        TFNamaKaryawan.setText(null);
-        TFTeleponKaryawan.setText(null);
-        TFEmailKaryawan.setText(null);
-        TFAlamatKaryawan.setText(null);
+        TFIdKaryawan.setText("");
+        TFNamaKaryawan.setText("");
+        TFTeleponKaryawan.setText("");
+        TFEmailKaryawan.setText("");
+        TFAlamatKaryawan.setText("");
     }
          
     private void tampilJabatanStatus() {
@@ -651,7 +651,7 @@ public class FiturKaryawan extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void txtCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariFocusGained
-        txtCari.setText(null);
+        txtCari.setText("");
         txtCari.setForeground(new Color(0,0,0));
         txtCari.setFont(new Font("sansserif",0,14));
     }//GEN-LAST:event_txtCariFocusGained

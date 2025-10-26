@@ -1470,11 +1470,11 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
     private boolean validation() {
         boolean valid = false;
         
-        if(lbTgl.getText().trim().length() == 0) {
+        if(lbTgl.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Silahkan Pilih Nomor Reservasi");
-        } else if(lbIdKaryawan.getText().trim().length() == 0) {
+        } else if(lbIdKaryawan.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Silahkan Pilih Karyawan");  
-        } else if(txtBayar.getText().trim().length() == 0) {
+        } else if(txtBayar.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Silahkan Masukkan Jumlah Pembayaran");
         } else if(tableDetail.getRowCount() == 0) {
             JOptionPane.showMessageDialog(parent, "Silahkan Pilih Tindakan");    
@@ -1498,7 +1498,7 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
             if(kodeTdkn.length() == 0) {
                 valid = false;
                 JOptionPane.showMessageDialog(parent, "Silahkan Pilih Tindakan");
-            } else if(servicPemeriksaan.validastionAddData(modelPasien) && lbIdPasien2.getText().length() != 0) {
+            } else if(servicPemeriksaan.validastionAddData(modelPasien) && !lbIdPasien2.getText().isBlank()) {
                 valid = false;
                 JOptionPane.showMessageDialog(parent, "Pasien tidak terdaftar");
             } else if(!disc.equals("Klik disini dan Scan Kartu Member")) {

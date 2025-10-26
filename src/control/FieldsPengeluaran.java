@@ -10,9 +10,9 @@ package control;
  */
 public class FieldsPengeluaran {
 
-    public FieldsPengeluaran(String type, String detail, String subtotal) {
+    public FieldsPengeluaran(String type, String detailType, String subtotal) {
         this.type = type;
-        this.detail = detail;
+        this.detailType = detailType;
         this.subtotal = subtotal;
     }
 
@@ -20,15 +20,15 @@ public class FieldsPengeluaran {
     }
 
     private String type;
-    private String detail;
+    private String detailType;
     private String subtotal;
 
     public String getType() {
         return type;
     }
 
-    public String getDetail() {
-        return detail;
+    public String getDetailType() {
+        return detailType;
     }
 
     public String getSubtotal() {

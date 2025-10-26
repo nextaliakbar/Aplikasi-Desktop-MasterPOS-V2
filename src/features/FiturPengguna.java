@@ -155,15 +155,15 @@ public class FiturPengguna extends javax.swing.JPanel {
       
       private boolean validationAddData(){
         boolean valid = false;
-        if(TFIdPengguna.getText().isEmpty()){
+        if(TFIdPengguna.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "ID Pengguna Tidak Boleh Kosong");
-        }else if (TFNamaPengguna.getText().isEmpty()){
+        }else if (TFNamaPengguna.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Nama Pengguna Tidak Boleh Kosong");
-        }else if (TFUsernamePengguna.getText().isEmpty()){
+        }else if (TFUsernamePengguna.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Username Pengguna Tidak Boleh Kosong");
-        }else if (TFPasswordPengguna.getText().isEmpty()){
+        }else if (TFPasswordPengguna.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Password Pengguna Tidak Boleh Kosong");
-        }else if (TFEmailPengguna.getText().isEmpty()){
+        }else if (TFEmailPengguna.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Email Pengguna Tidak Boleh Kosong");   
         }else{
             valid = true;
@@ -174,13 +174,13 @@ public class FiturPengguna extends javax.swing.JPanel {
       
       private boolean validationUpdateData(){
         boolean valid = false;
-        if(TFIdPengguna.getText().isEmpty()){
+        if(TFIdPengguna.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "ID Pengguna Tidak Boleh Kosong");
-        }else if (TFNamaPengguna.getText().isEmpty()){
+        }else if (TFNamaPengguna.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Nama Pengguna Tidak Boleh Kosong");
-        }else if (TFUsernamePengguna.getText().isEmpty()){
+        }else if (TFUsernamePengguna.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Username Pengguna Tidak Boleh Kosong");
-        }else if (TFEmailPengguna.getText().isEmpty()){
+        }else if (TFEmailPengguna.getText().isBlank()){
             JOptionPane.showMessageDialog(parent, "Email Pengguna Tidak Boleh Kosong");   
         }else{
             valid = true;
@@ -190,11 +190,11 @@ public class FiturPengguna extends javax.swing.JPanel {
     }
       
     private void clearField(){
-        TFIdPengguna.setText(null);
-        TFNamaPengguna.setText(null);
-        TFUsernamePengguna.setText(null);
-        TFPasswordPengguna.setText(null);
-        TFEmailPengguna.setText(null);
+        TFIdPengguna.setText("");
+        TFNamaPengguna.setText("");
+        TFUsernamePengguna.setText("");
+        TFPasswordPengguna.setText("");
+        TFEmailPengguna.setText("");
     }
     
     private void cariData() {
@@ -650,7 +650,7 @@ public class FiturPengguna extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void txtCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariFocusGained
-        txtCari.setText(null);
+        txtCari.setText("");
         txtCari.setForeground(new Color(0,0,0));
         txtCari.setFont(new Font("sansserif",0,14));
     }//GEN-LAST:event_txtCariFocusGained

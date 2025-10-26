@@ -96,8 +96,7 @@ public class FiturRestok extends javax.swing.JPanel {
         String namaPengguna = pemesanan.modelPemesanan.getModelPengguna().getNama();
         lbPemesan.setText(namaPengguna + " / " + idPengguna);    
         } catch(NullPointerException ex) {
-            lbNoPemesanan.setForeground(new Color(255, 255, 255));
-            lbNoPemesanan.setText("0");
+            ex.printStackTrace();
         }
     }
     
@@ -1021,7 +1020,7 @@ public class FiturRestok extends javax.swing.JPanel {
     
     private boolean validationSave() {
         boolean valid = false;
-        if(lbNoPemesanan.getText().length() == 0 || lbNoPemesanan.getText().equals("0")) {
+        if(lbNoPemesanan.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Silahkan Masukkan No Pemesanan");
         } else if(tableDetail.getRowCount() == 0) {
             JOptionPane.showMessageDialog(parent, "Silahkan Kirim Data Barang Pemesanan");

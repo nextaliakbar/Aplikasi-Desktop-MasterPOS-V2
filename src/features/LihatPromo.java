@@ -215,7 +215,7 @@ public class LihatPromo extends java.awt.Dialog {
     }//GEN-LAST:event_btnEndActionPerformed
 
     private void txtCariPromoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariPromoFocusGained
-        txtCariPromo.setText(null);
+        txtCariPromo.setText("");
         txtCariPromo.setFont(new Font("sansserif", 0, 16));
         txtCariPromo.setForeground(new Color(0, 0, 0));
     }//GEN-LAST:event_txtCariPromoFocusGained

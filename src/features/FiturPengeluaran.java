@@ -167,22 +167,17 @@ public class FiturPengeluaran extends javax.swing.JPanel {
         
 //        tambah data pengeluaran
         ModelPengeluaran modelPengeluaran = new ModelPengeluaran(noPengeluaran, tgl, String.valueOf(total()), deskripsi, modelPengguna);
-        servicePengeluaran.addDataPengeluaran(parent, modelPengeluaran);
         
         ModelDetailPengeluaran detail = new ModelDetailPengeluaran();
 //        tambah data detail pengeluaran
-        List<String> noJenis = new ArrayList<>();
-        List<String> detailJenis = new ArrayList<>();
-        List<Integer> subtotal = new ArrayList<>();
-        detail.setModelPengeluaran(modelPengeluaran);
+        List<PengeluaranSementara> pengeluaranSementara = new ArrayList<>();
         for(int a = 0; a < tableDetail.getRowCount(); a++) {
-            noJenis.add((String) tableDetail.getValueAt(a, 0));
-            detailJenis.add((String) tableDetail.getValueAt(a, 2));
-            subtotal.add((Integer)tableDetail.getValueAt(a, 3));
-            PengeluaranSementara ps = new PengeluaranSementara(noJenis, detailJenis, subtotal);
-            modelPengeluaran.setNoPengeluaran(noPengeluaran);
-            servicePengeluaran.addDataDetail(detail, ps);
+            String noJenis = tableDetail.getValueAt(a, 0).toString();
+            String detailJenis = tableDetail.getValueAt(a, 2).toString();
+            Integer subtotal = Integer.parseInt(tableDetail.getValueAt(a, 3).toString());
+            pengeluaranSementara.add(new PengeluaranSementara(noJenis, detailJenis, subtotal));
         }
+        servicePengeluaran.addDataPengeluaran(parent, modelPengeluaran, pengeluaranSementara);
         tabmodel2.setRowCount(0);
     }
     
@@ -194,8 +189,8 @@ public class FiturPengeluaran extends javax.swing.JPanel {
         DecimalFormat df = new DecimalFormat("#,##0.##");
         tabmodel2.addRow(new Object[]{noJenis, jenisPengeluaran, detailJenis, subtotal});
         lbTotal.setText(df.format(total()));
-        txtDetailJenis.setText(null);
-        txtSubtotal.setText(null);
+        txtDetailJenis.setText("");
+        txtSubtotal.setText("");
     }
     
 //    tampil detail
@@ -815,7 +810,7 @@ public class FiturPengeluaran extends javax.swing.JPanel {
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void txtCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariFocusGained
-        txtCari.setText(null);
+        txtCari.setText("");
         txtCari.setForeground(new Color(0,0,0));
         txtCari.setFont(new Font("sansserif",0,14));
         pagination.setVisible(false);
@@ -846,8 +841,8 @@ public class FiturPengeluaran extends javax.swing.JPanel {
                 visibleSwing(false, true, true);
                 break;
         }
-        txtDetailJenis.setText(null);
-        txtSubtotal.setText(null);
+        txtDetailJenis.setText("");
+        txtSubtotal.setText("");
         String jenis = (String) cbxJenis.getSelectedItem();
         ModelJenisPengeluaran modelJenis = new ModelJenisPengeluaran();
         modelJenis.setJenis(jenis);
@@ -872,7 +867,7 @@ public class FiturPengeluaran extends javax.swing.JPanel {
     }//GEN-LAST:event_txtSubtotalKeyTyped
 
     private void txtDescFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDescFocusGained
-        setFieldArea(null, new Color(0, 0, 0), Font.PLAIN);
+        setFieldArea("", new Color(0, 0, 0), Font.PLAIN);
     }//GEN-LAST:event_txtDescFocusGained
 
     private void btnPilihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPilihActionPerformed
@@ -931,9 +926,9 @@ public class FiturPengeluaran extends javax.swing.JPanel {
     
     private boolean validation() {
         boolean valid = false;
-        if(txtDetailJenis.getText().isEmpty()) {
+        if(txtDetailJenis.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Silahkan isi detail jenis");
-        } else if(txtSubtotal.getText().isEmpty()) {
+        } else if(txtSubtotal.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Silahkan isi subtotal");
         } else {
             valid = true;
@@ -950,8 +945,8 @@ public class FiturPengeluaran extends javax.swing.JPanel {
     }
     
     private void clearField() {
-        txtDetailJenis.setText(null);
-        txtSubtotal.setText(null);
+        txtDetailJenis.setText("");
+        txtSubtotal.setText("");
         txtDesc.setText("Catatan(Opsional)");
         txtDesc.setForeground(new Color(185, 185, 185));
         lbTotal.setText("0");

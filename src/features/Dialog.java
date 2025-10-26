@@ -158,13 +158,13 @@ public class Dialog extends java.awt.Dialog {
 
     private boolean validation() {
         boolean valid = false;
-        if(t_nama.getText().length() == 0) {
+        if(t_nama.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Nama Pasien tidak boleh kosong");
-        } else if(t_no_Telp.getText().length() == 0) {
+        } else if(t_no_Telp.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "No Telepon tidak boleh kosong");
-        } else if(t_alamat.getText().length() == 0) {
+        } else if(t_alamat.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Alamat tidak boleh kosong");
-        } else if(!t_email.getText().isEmpty()) {
+        } else if(!t_email.getText().isBlank()) {
             String REGEX_EMAIL = "[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
             Pattern pattern = Pattern.compile(REGEX_EMAIL);
             Matcher matcher = pattern.matcher(t_email.getText());
@@ -182,11 +182,11 @@ public class Dialog extends java.awt.Dialog {
     }
     
     private void clearField() {
-        t_idPasien.setText(null);
-        t_nama.setText(null);
-        t_no_Telp.setText(null);
-        t_alamat.setText(null);
-        t_email.setText(null);
+        t_idPasien.setText("");
+        t_nama.setText("");
+        t_no_Telp.setText("");
+        t_alamat.setText("");
+        t_email.setText("");
     }
     
     

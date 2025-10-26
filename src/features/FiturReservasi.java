@@ -836,7 +836,7 @@ public class FiturReservasi extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void txtCariFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariFocusGained
-        txtCari.setText(null);
+        txtCari.setText("");
         txtCari.setForeground(new Color(0,0,0));
         txtCari.setFont(new Font("sansserif",0,14));
         pagination.setVisible(false);
@@ -845,7 +845,7 @@ public class FiturReservasi extends javax.swing.JPanel {
     }//GEN-LAST:event_txtCariFocusGained
 
     private void txtCariPasienFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCariPasienFocusGained
-        txtCariPasien.setText(null);
+        txtCariPasien.setText("");
         txtCariPasien.setForeground(new Color(0, 0, 0));
         txtCariPasien.setFont(new Font("sansserif", 0, 14));
     }//GEN-LAST:event_txtCariPasienFocusGained
@@ -876,10 +876,10 @@ public class FiturReservasi extends javax.swing.JPanel {
     }
         
     private void clearField() {
-        txtNoReservasi.setText(null);
-        txtIdPasien.setText(null);
-        txtNamaPasien.setText(null);
-        txtTglReservasi.setText(null);
+        txtNoReservasi.setText("");
+        txtIdPasien.setText("");
+        txtNamaPasien.setText("");
+        txtTglReservasi.setText("");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
