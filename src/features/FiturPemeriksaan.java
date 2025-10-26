@@ -254,6 +254,13 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
         DialogDetail dialog = new DialogDetail(parent, true, "Slide-1", modelDetail, 
                 null, null, null);
         dialog.setVisible(true);
+        
+        if(dialog.isOpenBusinessSeting) {
+            removeAll();
+            add(new FiturPengaturan("Slide-Akun", parent, modelPengguna, lbNama));
+            repaint();
+            revalidate();
+        }
     }
     
 //      Instance report

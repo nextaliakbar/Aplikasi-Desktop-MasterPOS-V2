@@ -63,6 +63,7 @@ public class DialogDetail extends java.awt.Dialog {
     private ModelDetailPemesanan detailPemesanan;
     private ModelDetailPengeluaran detailPengeluaran;
     private JFrame parent;
+    public boolean isOpenBusinessSeting = false;
     public DialogDetail(java.awt.Frame parent, boolean modal, String slide, 
     ModelDetailPemeriksaan detailPemeriksaan, ModelDetailPenjualan detailPenjualan, 
     ModelDetailPemesanan detailPemesanan, ModelDetailPengeluaran detailPengeluaran) {
@@ -1715,12 +1716,30 @@ public class DialogDetail extends java.awt.Dialog {
         perbaruiStatus();
     }//GEN-LAST:event_btnBatalReservasiActionPerformed
     
+    private boolean validationPrint() {
+        ServicePengaturan servicePengaturan = new ServicePengaturan();
+        List<ModelPengaturanBisnis> modelPengaturanBisnis = servicePengaturan.loadBusiness();
+        for(var data : modelPengaturanBisnis) {
+            if(data.getValue() == null) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     private void actionBtnPrintPemeriksaan() {
         btnPrintPemeriksaan.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F1"), "F1Pressed");
         btnPrintPemeriksaan.getActionMap().put("F1Pressed", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               printPemeriksaan();
+               if(validationPrint()) {
+                 printPemeriksaan();
+               } else {
+                   JOptionPane.showMessageDialog(parent, "Silahkan atur informasi bisnis untuk dapat melakukan cetak struk");
+                   isOpenBusinessSeting = true;
+                   dispose();
+               }
             }
         });
     }
@@ -1731,7 +1750,13 @@ public class DialogDetail extends java.awt.Dialog {
         btnPrintPenjualan.getActionMap().put("F1Pressed", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                printPenjualan();
+                if(validationPrint()) {
+                  printPenjualan();
+                } else {
+                    JOptionPane.showMessageDialog(parent, "Silahkan atur informasi bisnis untuk dapat melakukan cetak struk");
+                    isOpenBusinessSeting = true;
+                    dispose();
+                }
             }
         });
     }

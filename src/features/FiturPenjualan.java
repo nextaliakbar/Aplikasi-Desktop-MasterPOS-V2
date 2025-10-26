@@ -37,6 +37,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import model.ModelBarang;
 import model.ModelDetailPenjualan;
+import model.ModelPengaturanBisnis;
 import util.ModelHeaderTable;
 import model.ModelPengguna;
 import model.ModelPenjualan;
@@ -44,6 +45,7 @@ import util.ModelRenderTable;
 import model.Sementara;
 import net.sf.jasperreports.engine.JRException;
 import service.ServiceDetailPenjualan;
+import service.ServicePengaturan;
 import service.ServicePenjualan;
 import swing.TableCellActionRender;
 import swing.TableCellEditor;
@@ -247,6 +249,12 @@ public class FiturPenjualan extends javax.swing.JPanel {
         modelDetail.setModelPenjualan(modelPenjualan);
         DialogDetail detail = new DialogDetail(parent, true, "Slide-6",  null, modelDetail, null, null);
         detail.setVisible(true);
+        if(detail.isOpenBusinessSeting) {
+            removeAll();
+            add(new FiturPengaturan("Slide-Akun", parent, modelPengguna, lbNama));
+            repaint();
+            revalidate();
+        }
     }
     
     private void tambahData() {
@@ -1313,22 +1321,58 @@ public class FiturPenjualan extends javax.swing.JPanel {
     }//GEN-LAST:event_spnJumlahStateChanged
 
     private void btnSimpanCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanCetakActionPerformed
-        // TODO add your handling code here:
+        if(validationPrint()) {
+            if(validation()) {
+                tambahData();
+                printPenjualan();
+                clearFieldAll();
+                tabmodel1.setRowCount(0);
+                changePanel(panelData);
+                tampilData();
+            }
+        } else {
+            JOptionPane.showMessageDialog(parent, "Silahkan atur informasi bisnis untuk dapat melakukan cetak struk");
+            removeAll();
+            add(new FiturPengaturan("Slide-Akun", parent, modelPengguna, lbNama));
+            repaint();
+            revalidate();
+        }
     }//GEN-LAST:event_btnSimpanCetakActionPerformed
 
+    private boolean validationPrint() {
+        ServicePengaturan servicePengaturan = new ServicePengaturan();
+        List<ModelPengaturanBisnis> modelPengaturanBisnis = servicePengaturan.loadBusiness();
+        for(var data : modelPengaturanBisnis) {
+            if(data.getValue() == null) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     private void actionBtnSimpanCetak() {
         btnSimpanCetak.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F1"), "F1Pressed");
         btnSimpanCetak.getActionMap().put("F1Pressed", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(validation()) {
-                    tambahData();
-                    printPenjualan();
-                    clearFieldAll();
-                    tabmodel1.setRowCount(0);
-                    changePanel(panelData);
-                    tampilData();
+                if(validationPrint()) {
+                        if(validation()) {
+                        tambahData();
+                        printPenjualan();
+                        clearFieldAll();
+                        tabmodel1.setRowCount(0);
+                        changePanel(panelData);
+                        tampilData();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(parent, "Silahkan atur informasi bisnis untuk dapat melakukan cetak struk");
+                    removeAll();
+                    add(new FiturPengaturan("Slide-Akun", parent, modelPengguna, lbNama));
+                    repaint();
+                    revalidate();
                 }
+                
             }
         });
     }

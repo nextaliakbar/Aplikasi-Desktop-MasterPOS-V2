@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -69,9 +70,11 @@ public class FiturLaporan extends javax.swing.JPanel {
     private final DecimalFormat df = new DecimalFormat("#,##0.##");
     private ServiceLaporan serviceLaporan = new ServiceLaporan();
     private JFrame parent;
-    public FiturLaporan(JFrame parent) {
+    private JLabel lbNama;
+    public FiturLaporan(JFrame parent, JLabel lbNama) {
         initComponents();
         this.parent = parent;
+        this.lbNama = lbNama;
         initation();
         txtTgl.setText(dateNow.format(formatter));
         styleTable(scrollPemeriksaan, tablePemeriksaan, 14);
@@ -178,6 +181,13 @@ public class FiturLaporan extends javax.swing.JPanel {
 
         DialogDetail dialog = new DialogDetail(parent, true, "Slide-1", modelDetail, null, null, null);
         dialog.setVisible(true);
+        
+        if(dialog.isOpenBusinessSeting) {
+            removeAll();
+            add(new FiturPengaturan("Slide-Akun", parent, modelPengguna, lbNama));
+            repaint();
+            revalidate();
+        }
     }
     
     //  Detail Penjualan
@@ -198,6 +208,12 @@ public class FiturLaporan extends javax.swing.JPanel {
         modelDetail.setModelPenjualan(modelPenjualan);
         DialogDetail detail = new DialogDetail(parent, true, "Slide-6", null, modelDetail, null, null);
         detail.setVisible(true);
+        if(detail.isOpenBusinessSeting) {
+            removeAll();
+            add(new FiturPengaturan("Slide-Akun", parent, modelPengguna, lbNama));
+            repaint();
+            revalidate();
+        }
     }
     
     //    Detail Pemesanan

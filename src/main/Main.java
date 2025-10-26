@@ -155,7 +155,7 @@ public class Main extends javax.swing.JFrame {
                         content.showContent(new FiturCetakKartu(parent));
                     } else if (subMenuIndex == 3) {
 //                        fitur laporan
-                        content.showContent(new FiturLaporan(parent));
+                        content.showContent(new FiturLaporan(parent, navbar.lbName));
                     }
                 }
                 
@@ -192,7 +192,7 @@ public class Main extends javax.swing.JFrame {
                             content.showContent(new FiturCetakKartu(parent));
                         } else if (subMenuIndex == 3) {
     //                        fitur laporan
-                            content.showContent(new FiturLaporan(parent));
+                            content.showContent(new FiturLaporan(parent, navbar.lbName));
                         }
                     }
                 }
