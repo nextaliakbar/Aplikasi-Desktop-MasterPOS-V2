@@ -67,7 +67,6 @@ public class FiturPengaturan extends javax.swing.JPanel {
     }
     
     private void changePanel(String slide) {
-        System.out.println(slide);
         switch(slide) {
             case "Slide-Akun" :
                 removeAll();
