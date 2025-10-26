@@ -1,3 +1,4 @@
 /dist/*
 /build/*
+/src/service/ServiceMail.java
 master_pos_schema.sql
