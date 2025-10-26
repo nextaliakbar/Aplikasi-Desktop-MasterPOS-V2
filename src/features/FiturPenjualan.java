@@ -23,6 +23,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -65,8 +66,10 @@ public class FiturPenjualan extends javax.swing.JPanel {
     private ServiceDetailPenjualan serviceDetailPenjualan = new ServiceDetailPenjualan();
     private final DecimalFormat df = new DecimalFormat("#,##0.##");
     private JFrame parent;
-    public FiturPenjualan(JFrame parent, ModelPengguna modelPengguna) {
+    private JLabel lbNama;
+    public FiturPenjualan(JFrame parent, ModelPengguna modelPengguna, JLabel lbNama) {
         initComponents();
+        this.lbNama = lbNama;
         this.parent = parent;
         this.modelPengguna = modelPengguna;
         styleTable(scrollPane, table, 8);

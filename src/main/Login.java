@@ -38,7 +38,6 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         this.parent = this;
-        Koneksi.setupDatabase();
         serviceLogin = new ServiceLogin();
         initiation();
     }
@@ -550,6 +549,7 @@ public class Login extends javax.swing.JFrame {
         FlatMacLightLaf.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                Koneksi.setupDatabase();
                 ServiceLogin serviceLogin = new ServiceLogin();
                 if(serviceLogin.getPenggunaByStatusLogin() != null) {
                     Main main = new Main(serviceLogin.getPenggunaByStatusLogin());

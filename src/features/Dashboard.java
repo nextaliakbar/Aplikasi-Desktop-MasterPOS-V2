@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -38,8 +39,10 @@ public class Dashboard extends javax.swing.JPanel {
     private ServiceDashboard serviceDashboard = new ServiceDashboard();
     private ModelPengguna modelPengguna;
     private JFrame parent;
-    public Dashboard(JFrame parent, ModelPengguna modelPengguna) {
+    private JLabel lbNama;
+    public Dashboard(JFrame parent, ModelPengguna modelPengguna, JLabel lbNama) {
         initComponents();
+        this.lbNama = lbNama;
         this.parent = parent;
         this.modelPengguna = modelPengguna;
         initiationCard();
@@ -123,14 +126,14 @@ public class Dashboard extends javax.swing.JPanel {
         this.card11.viewDetail(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                detail(new FiturPemeriksaan(parent, modelPengguna));
+                detail(new FiturPemeriksaan(parent, modelPengguna, lbNama));
             }
         });
         
         this.card12.viewDetail(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                detail(new FiturPenjualan(parent, modelPengguna));
+                detail(new FiturPenjualan(parent, modelPengguna, lbNama));
             }
         });
         

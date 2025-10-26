@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -44,6 +45,7 @@ import model.ModelKaryawan;
 import model.ModelPemeriksaan;
 import util.ModelRenderTable;
 import model.ModelPasien;
+import model.ModelPengaturanBisnis;
 import model.ModelPengguna;
 import model.ModelReservasi;
 import model.ModelTindakan;
@@ -52,6 +54,7 @@ import service.ServiceDetailPemeriksaan;
 import swing.TableCellActionRender;
 import swing.TableCellEditor;
 import service.ServicePemeriksaan;
+import service.ServicePengaturan;
 
 /**
  *
@@ -67,14 +70,16 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
     private JFrame parent;
     private TableAction action;
     private ModelPengguna modelPengguna;
+    private JLabel lbNama;
     private TableRowSorter<DefaultTableModel> rowSorter;
     private ServicePemeriksaan servicPemeriksaan = new ServicePemeriksaan();
     private ServiceDetailPemeriksaan serviceDetailPemeriksaan = new ServiceDetailPemeriksaan();
     private final DecimalFormat df = new DecimalFormat("#,##0.##");
-    public FiturPemeriksaan(JFrame parent, ModelPengguna modelPengguna) {
+    public FiturPemeriksaan(JFrame parent, ModelPengguna modelPengguna, JLabel lbNama) {
         initComponents();
         this.parent = parent;
         this.modelPengguna = modelPengguna;
+        this.lbNama = lbNama;
         styleTable(scrollPane, table, 13);
         tabmodel1 = (DefaultTableModel) table.getModel();
         rowSorter = new TableRowSorter<>(tabmodel1);
@@ -1387,15 +1392,24 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
     }//GEN-LAST:event_txtPotonganKeyPressed
 
     private void btnSimpanCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanCetakActionPerformed
-        if(validation()) {
-            tambahData();
-            printPemeriksaan();
-            tabmodel2.setRowCount(0);
-            tabmodel1.setRowCount(0);
-            clearField();
-            changePanel(panelData);
-            tampilData();
+        if(validationPrint()) {
+            if(validation()) {
+                tambahData();
+                printPemeriksaan();
+                tabmodel2.setRowCount(0);
+                tabmodel1.setRowCount(0);
+                clearField();
+                changePanel(panelData);
+                tampilData();
+            }
+        } else {
+            JOptionPane.showMessageDialog(parent, "Silahkan atur informasi bisnis untuk dapat melakukan cetak struk");
+            removeAll();
+            add(new FiturPengaturan("Slide-Akun", parent, modelPengguna, lbNama));
+            repaint();
+            revalidate();
         }
+        
     }//GEN-LAST:event_btnSimpanCetakActionPerformed
 
     private void txtDeskripsiFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDeskripsiFocusGained
@@ -1408,14 +1422,22 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
         btnSimpanCetak.getActionMap().put("F1Pressed", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(validation()) {
-                    tambahData();
-                    printPemeriksaan();
-                    tabmodel2.setRowCount(0);
-                    tabmodel1.setRowCount(0);
-                    clearField();
-                    changePanel(panelData);
-                    tampilData();
+                if(validationPrint()) {
+                    if(validation()) {
+                        tambahData();
+                        printPemeriksaan();
+                        tabmodel2.setRowCount(0);
+                        tabmodel1.setRowCount(0);
+                        clearField();
+                        changePanel(panelData);
+                        tampilData();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(parent, "Silahkan atur informasi bisnis untuk dapat melakukan cetak struk");
+                    removeAll();
+                    add(new FiturPengaturan("Slide-Akun", parent, modelPengguna, lbNama));
+                    repaint();
+                    revalidate();
                 }
             }
         });
@@ -1488,6 +1510,19 @@ public class FiturPemeriksaan extends javax.swing.JPanel {
         
         return valid;
     }
+    
+    private boolean validationPrint() {
+        ServicePengaturan servicePengaturan = new ServicePengaturan();
+        List<ModelPengaturanBisnis> modelPengaturanBisnis = servicePengaturan.loadBusiness();
+        for(var data : modelPengaturanBisnis) {
+            if(data.getValue() == null) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     
     private boolean validationAddTemporary() {
         boolean valid = true;

@@ -81,7 +81,7 @@ public class Main extends javax.swing.JFrame {
         navbar = new Navbar(parent, modelPengguna);
         String level = modelPengguna.getLevel();
         if(level.equals("Owner")) {
-        content.showContent(new Dashboard(parent,modelPengguna));   
+        content.showContent(new Dashboard(parent,modelPengguna, navbar.lbName));   
         } else {
         content.showContent(new FiturReservasi(parent, modelPengguna));   
             
@@ -94,7 +94,7 @@ public class Main extends javax.swing.JFrame {
                 if(level.equals("Owner")) {
                 if (menuIndex == 0 && subMenuIndex == -1) {
 //              fitur beranda
-                      content.showContent(new Dashboard(parent,modelPengguna));
+                      content.showContent(new Dashboard(parent,modelPengguna, navbar.lbName));
                 } else if (menuIndex == 1) {
 //              fitur master                
 
@@ -129,10 +129,10 @@ public class Main extends javax.swing.JFrame {
 //              fitur transaksi
                     if (subMenuIndex == 0) {
 //                        fitur pemeriksaan
-                        content.showContent(new FiturPemeriksaan(parent,modelPengguna));
+                        content.showContent(new FiturPemeriksaan(parent,modelPengguna, navbar.lbName));
                     } else if (subMenuIndex == 1) {
 //                        fitur penjualan
-                        content.showContent(new FiturPenjualan(parent,modelPengguna));
+                        content.showContent(new FiturPenjualan(parent,modelPengguna, navbar.lbName));
                     } else if (subMenuIndex == 2) {
 //                        fitur pemesanan
                         content.showContent(new FiturPemesanan(parent,modelPengguna, navbar.btnNotif));
@@ -168,10 +168,10 @@ public class Main extends javax.swing.JFrame {
 //                  fitur transaksasi
                         if (subMenuIndex == 0) {
     //                        fitur pemeriksaan
-                            content.showContent(new FiturPemeriksaan(parent,modelPengguna));
+                            content.showContent(new FiturPemeriksaan(parent,modelPengguna, navbar.lbName));
                         } else if (subMenuIndex == 1) {
     //                        fitur penjualan
-                            content.showContent(new FiturPenjualan(parent,modelPengguna));
+                            content.showContent(new FiturPenjualan(parent,modelPengguna, navbar.lbName));
                         } else if (subMenuIndex == 2) {
     //                        fitur pemesanan
                             content.showContent(new FiturPemesanan(parent,modelPengguna, navbar.btnNotif));

@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -68,6 +67,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
     }
     
     private void changePanel(String slide) {
+        System.out.println(slide);
         switch(slide) {
             case "Slide-Akun" :
                 removeAll();
@@ -889,7 +889,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
     }//GEN-LAST:event_btnViewPromoActionPerformed
 
     private void btnBack1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBack1ActionPerformed
-        back(new Dashboard(parent,modelPengguna));
+        back(new Dashboard(parent,modelPengguna, lbNama));
     }//GEN-LAST:event_btnBack1ActionPerformed
 
     private void cbxJenisPromoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxJenisPromoActionPerformed
@@ -927,15 +927,15 @@ public class FiturPengaturan extends javax.swing.JPanel {
     }//GEN-LAST:event_txtPromoKeyTyped
 
     private void btnBack3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBack3ActionPerformed
-        back(new Dashboard(parent,modelPengguna));
+        back(new Dashboard(parent,modelPengguna,lbNama));
     }//GEN-LAST:event_btnBack3ActionPerformed
 
     private void btnBack2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBack2ActionPerformed
-        back(new Dashboard(parent,modelPengguna));
+        back(new Dashboard(parent,modelPengguna,lbNama));
     }//GEN-LAST:event_btnBack2ActionPerformed
 
     private void btnBack4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBack4ActionPerformed
-        back(new Dashboard(parent,modelPengguna));
+        back(new Dashboard(parent,modelPengguna, lbNama));
     }//GEN-LAST:event_btnBack4ActionPerformed
 
     private void btnPerbaruiUsahaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerbaruiUsahaActionPerformed
@@ -1035,7 +1035,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
         modelPengguna.setEmail(txtEmail.getText());
         servicePengaturan.setAccount(parent, modelPengguna);
         lbNama.setText(txtNama.getText());
-        back(new Dashboard(parent,modelPengguna));
+        back(new Dashboard(parent,modelPengguna, lbNama));
     }
     
 //    Informasi Bisnis
@@ -1062,7 +1062,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
             new ModelPengaturanBisnis("Alamat", txtAlamat.getText())
         );
         servicePengaturan.setBusiness(parent, modelPengaturanBisnis);
-        back(new Dashboard(parent, modelPengguna));
+        back(new Dashboard(parent, modelPengguna, lbNama));
     }
     
 //    Ubah Password
@@ -1078,7 +1078,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
         if(oldPassword.equals(this.modelPengguna.getPassword())) {
             if(confirPass.equals(newPassword)) {
             servicePengaturan.setPassword(parent, modelPengguna);
-            back(new Dashboard(parent,modelPengguna));
+            back(new Dashboard(parent,modelPengguna, lbNama));
             } else {
             JOptionPane.showMessageDialog(parent, "Konfirmasi password salah");   
             }
@@ -1185,13 +1185,12 @@ public class FiturPengaturan extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(parent, "Nama tidak boleh kosong");
         } else if(txtUsername.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Username tidak boleh kosong");
-
         } else if(txtEmail.getText().isBlank()) {
             JOptionPane.showMessageDialog(parent, "Email tidak boleh kosong");
-        } else if(!txtEmail.getText().isBlank()) {
-            validationFormatEmail();
         } else {
-            valid = true;
+            if(validationFormatEmail()) {
+                valid = true;
+            }
         }
         return valid;
     }
