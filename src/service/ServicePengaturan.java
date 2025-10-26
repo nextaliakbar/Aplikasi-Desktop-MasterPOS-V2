@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import model.ModelPengaturanBisnis;
 import model.ModelPengguna;
 /**
  *
@@ -52,6 +53,36 @@ public class ServicePengaturan {
             pst.executeUpdate();
             pst.close();
             JOptionPane.showMessageDialog(parent, "Akun berhasil dirubah");
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public List<ModelPengaturanBisnis> loadBusiness() {
+        List<ModelPengaturanBisnis> modelPengaturanBisnis = new ArrayList<>();
+        String query = "SELECT * FROM pengaturan_bisnis";
+        try(PreparedStatement pst = connection.prepareStatement(query);
+                ResultSet rst = pst.executeQuery()) {
+            while(rst.next()) {
+                modelPengaturanBisnis.add(new ModelPengaturanBisnis(rst.getString("key"), rst.getString("value")));
+            }
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return modelPengaturanBisnis;
+    }
+    
+    public void setBusiness(JFrame parent, List<ModelPengaturanBisnis> modelPengaturanBisnis) {
+        String query = "UPDATE pengaturan_bisnis SET value=? WHERE key=?";
+        try(PreparedStatement pst = connection.prepareStatement(query)) {
+            for(var data : modelPengaturanBisnis) {
+                pst.setString(1, data.getValue());
+                pst.setString(2, data.getKey());
+                pst.addBatch();
+            }
+            pst.executeBatch();
+            JOptionPane.showMessageDialog(parent, "Informasi usaha berhasil dirubah");
         } catch(Exception ex) {
             ex.printStackTrace();
         }

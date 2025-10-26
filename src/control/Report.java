@@ -13,6 +13,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
+import service.ServicePengaturan;
 
 /**
  *
@@ -23,7 +24,10 @@ public class Report {
     private static Report instance;
     private JasperReport report1;
     private JasperReport report2;
-    
+    private ServicePengaturan servicePengaturan;
+    private String NAMA_USAHA = "";
+    private String NO_TELP = "";
+    private String ALAMAT = "";
     public static Report getInstance() {
         if(instance == null) {
             instance = new Report();
@@ -33,7 +37,7 @@ public class Report {
     }
     
     private Report() {
-        
+        servicePengaturan = new ServicePengaturan();   
     }
     
     public void compileReport(String slide) throws JRException{
@@ -69,8 +73,28 @@ public class Report {
         }
     }
     
+    private void loadBusiness() {
+        for(var data : servicePengaturan.loadBusiness()) {
+            switch (data.getKey()) {
+                case "Nama Usaha":
+                    NAMA_USAHA = data.getValue();
+                    break;
+                case "No Telp":
+                    NO_TELP = data.getValue();
+                    break;
+                case "Alamat":
+                    ALAMAT = data.getValue();
+                    break;
+            }
+        }
+    }
+    
     public void printReportPemeriksaan(ParamPemeriksaan data) throws JRException {
         Map parameter = new HashMap();
+        loadBusiness();
+        parameter.put("namaUsaha", NAMA_USAHA);
+        parameter.put("alamat", ALAMAT);
+        parameter.put("noTelp", "No.Telp : " + NO_TELP);
         parameter.put("noPmrksn", data.getNoPemeriksaan());
         parameter.put("tanggal", data.getTglPemeriksaan());
         parameter.put("jam", data.getJamPemeriksaan());
@@ -89,9 +113,12 @@ public class Report {
     
     public void printReportPenjualan(ParamPenjualan data) throws JRException{
         Map parameter = new HashMap();
+        loadBusiness();
+        parameter.put("namaUsaha", NAMA_USAHA);
+        parameter.put("alamat", ALAMAT);
+        parameter.put("noTelp", "No.Telp : " + NO_TELP);
         parameter.put("tgljam", data.getTglJam());
         parameter.put("noPenjualan", data.getNoPenjualan());
-        parameter.put("admin", data.getAdmin());
         parameter.put("total", data.getTotal());
         parameter.put("bayar", data.getBayar());
         parameter.put("kembalian", data.getKembali());

@@ -219,7 +219,7 @@ public class FiturPenjualan extends javax.swing.JPanel {
             String bayar = df.format(Double.parseDouble(txtBayar.getText()));
             String kembali = lbKembali.getText();
             String jenisPembayaran = (String) cbx_jenisPembayaran.getSelectedItem();
-            ParamPenjualan paramater = new ParamPenjualan(tglPenjualan+","+jamPenjualan, noPenjualan, admin, total, bayar, kembali, jenisPembayaran, fields);
+            ParamPenjualan paramater = new ParamPenjualan(tglPenjualan+","+jamPenjualan, noPenjualan, total, bayar, kembali, jenisPembayaran, fields);
             Report.getInstance().printReportPenjualan(paramater);
         } catch(JRException ex) {
             ex.printStackTrace();

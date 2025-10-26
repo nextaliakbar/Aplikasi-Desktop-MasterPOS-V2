@@ -10,14 +10,19 @@ import com.raven.datechooser.listener.DateChooserAdapter;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import model.ModelPengaturanBisnis;
 import model.ModelPengguna;
 import model.ModelPromo;
 import service.ServicePengaturan;
@@ -46,6 +51,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
         this.parent = parent;
         this.modelPengguna = modelPengguna;
         dataAkun();
+        dataBisnis();
         dateChooser = new DateChooser();
         lbNotif.setVisible(false);
         style();
@@ -57,6 +63,8 @@ public class FiturPengaturan extends javax.swing.JPanel {
         cbxJenisPromo.setFont(new Font("sansserif",0,20));
         cbxJenisPromo.setBackground(new Color(255,255,255));
         cbxJenisPromo.setForeground(new Color(0,0,0));
+        txtAlamat.setLineWrap(true);
+        txtAlamat.setWrapStyleWord(true);
     }
     
     private void changePanel(String slide) {
@@ -121,6 +129,15 @@ public class FiturPengaturan extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         label1 = new javax.swing.JLabel();
         btnBack1 = new swing.Button();
+        panel6 = new javax.swing.JPanel();
+        lb_nama_usaha = new javax.swing.JLabel();
+        lb_alamat = new javax.swing.JLabel();
+        lb_no_telp = new javax.swing.JLabel();
+        txtNamaUsaha = new javax.swing.JTextField();
+        txtNoTelp = new javax.swing.JTextField();
+        btnPerbaruiUsaha = new swing.Button();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtAlamat = new javax.swing.JTextArea();
         panelPassword = new javax.swing.JPanel();
         panel3 = new javax.swing.JPanel();
         lb_old = new javax.swing.JLabel();
@@ -217,7 +234,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
                             .addComponent(lb_email))
                         .addGap(43, 43, 43)
                         .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
                             .addComponent(txtUsername)
                             .addComponent(txtNama))))
                 .addGap(26, 26, 26))
@@ -239,7 +256,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
                     .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPerbarui, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel1.setBackground(new java.awt.Color(135, 15, 50));
@@ -278,6 +295,96 @@ public class FiturPengaturan extends javax.swing.JPanel {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
+        panel6.setBackground(new java.awt.Color(255, 255, 255));
+
+        lb_nama_usaha.setFont(new java.awt.Font("SansSerif", 0, 20)); // NOI18N
+        lb_nama_usaha.setForeground(new java.awt.Color(0, 0, 0));
+        lb_nama_usaha.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lb_nama_usaha.setText("Nama Usaha");
+
+        lb_alamat.setFont(new java.awt.Font("SansSerif", 0, 20)); // NOI18N
+        lb_alamat.setForeground(new java.awt.Color(0, 0, 0));
+        lb_alamat.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lb_alamat.setText("Alamat");
+
+        lb_no_telp.setFont(new java.awt.Font("SansSerif", 0, 20)); // NOI18N
+        lb_no_telp.setForeground(new java.awt.Color(0, 0, 0));
+        lb_no_telp.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lb_no_telp.setText("No.Telp");
+
+        txtNamaUsaha.setFont(new java.awt.Font("SansSerif", 0, 20)); // NOI18N
+        txtNamaUsaha.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(185, 185, 185)));
+
+        txtNoTelp.setFont(new java.awt.Font("SansSerif", 0, 20)); // NOI18N
+        txtNoTelp.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(185, 185, 185)));
+        txtNoTelp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoTelpKeyTyped(evt);
+            }
+        });
+
+        btnPerbaruiUsaha.setBackground(new java.awt.Color(135, 15, 50));
+        btnPerbaruiUsaha.setForeground(new java.awt.Color(255, 255, 255));
+        btnPerbaruiUsaha.setText("PERBARUI");
+        btnPerbaruiUsaha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPerbaruiUsahaActionPerformed(evt);
+            }
+        });
+
+        jScrollPane1.setBackground(new java.awt.Color(51, 51, 51));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(185, 185, 185)));
+
+        txtAlamat.setBackground(new java.awt.Color(255, 255, 255));
+        txtAlamat.setColumns(20);
+        txtAlamat.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
+        txtAlamat.setForeground(new java.awt.Color(0, 0, 0));
+        txtAlamat.setRows(5);
+        jScrollPane1.setViewportView(txtAlamat);
+
+        javax.swing.GroupLayout panel6Layout = new javax.swing.GroupLayout(panel6);
+        panel6.setLayout(panel6Layout);
+        panel6Layout.setHorizontalGroup(
+            panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel6Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lb_no_telp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lb_nama_usaha)
+                    .addComponent(lb_alamat))
+                .addGap(43, 43, 43)
+                .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panel6Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnPerbaruiUsaha, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNoTelp, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtNamaUsaha, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1))
+                .addGap(26, 26, 26))
+        );
+        panel6Layout.setVerticalGroup(
+            panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lb_nama_usaha, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNamaUsaha, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lb_no_telp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNoTelp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel6Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(lb_alamat, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panel6Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnPerbaruiUsaha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout panelAkunLayout = new javax.swing.GroupLayout(panelAkun);
         panelAkun.setLayout(panelAkunLayout);
         panelAkunLayout.setHorizontalGroup(
@@ -286,10 +393,12 @@ public class FiturPengaturan extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(panelAkunLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAkunLayout.createSequentialGroup()
-                        .addGap(0, 114, Short.MAX_VALUE)
-                        .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 115, Short.MAX_VALUE)))
+                    .addGroup(panelAkunLayout.createSequentialGroup()
+                        .addGap(0, 102, Short.MAX_VALUE)
+                        .addGroup(panelAkunLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(panel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(panel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 103, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelAkunLayout.setVerticalGroup(
@@ -299,7 +408,9 @@ public class FiturPengaturan extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(267, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         add(panelAkun, "card2");
@@ -441,7 +552,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(panel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(267, Short.MAX_VALUE))
+                .addContainerGap(312, Short.MAX_VALUE))
         );
 
         add(panelPassword, "card3");
@@ -649,7 +760,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(panel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(165, Short.MAX_VALUE))
+                .addContainerGap(231, Short.MAX_VALUE))
         );
 
         add(panelPromo, "card3");
@@ -743,7 +854,9 @@ public class FiturPengaturan extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPerbaruiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerbaruiActionPerformed
-        aturAkun();
+        if(validationAccount()) {
+            aturAkun();
+        }
     }//GEN-LAST:event_btnPerbaruiActionPerformed
 
     private void btnSimpan2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpan2ActionPerformed
@@ -825,7 +938,22 @@ public class FiturPengaturan extends javax.swing.JPanel {
         back(new Dashboard(parent,modelPengguna));
     }//GEN-LAST:event_btnBack4ActionPerformed
 
-    
+    private void btnPerbaruiUsahaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerbaruiUsahaActionPerformed
+       if(validationBusiness()) {
+           aturBisnis();
+       }
+    }//GEN-LAST:event_btnPerbaruiUsahaActionPerformed
+
+    private void txtNoTelpKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoTelpKeyTyped
+        characterDigit(evt);
+    }//GEN-LAST:event_txtNoTelpKeyTyped
+
+    private void characterDigit(KeyEvent evt) {
+        char typed = evt.getKeyChar();
+        if(!Character.isDigit(typed)) {
+            evt.consume();
+        }
+    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -834,6 +962,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
     private swing.Button btnBack3;
     private swing.Button btnBack4;
     private swing.Button btnPerbarui;
+    private swing.Button btnPerbaruiUsaha;
     private swing.Button btnSimpan2;
     private swing.Button btnSimpan3;
     private swing.Button btnViewPromo;
@@ -842,17 +971,21 @@ public class FiturPengaturan extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel label1;
     private javax.swing.JLabel label2;
     private javax.swing.JLabel label3;
     private javax.swing.JLabel label4;
     private javax.swing.JLabel lbNotif;
+    private javax.swing.JLabel lb_alamat;
     private javax.swing.JLabel lb_confirm;
     private javax.swing.JLabel lb_email;
     private javax.swing.JLabel lb_harga;
     private javax.swing.JLabel lb_jenis;
     private javax.swing.JLabel lb_nama;
+    private javax.swing.JLabel lb_nama_usaha;
     private javax.swing.JLabel lb_new;
+    private javax.swing.JLabel lb_no_telp;
     private javax.swing.JLabel lb_old;
     private javax.swing.JLabel lb_rentang;
     private javax.swing.JLabel lb_rentang1;
@@ -863,16 +996,20 @@ public class FiturPengaturan extends javax.swing.JPanel {
     private javax.swing.JPanel panel3;
     private javax.swing.JPanel panel4;
     private javax.swing.JPanel panel5;
+    private javax.swing.JPanel panel6;
     private javax.swing.JPanel panelAkun;
     private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panelPassword;
     private javax.swing.JPanel panelPromo;
     private javax.swing.JScrollPane scrollInfo;
+    private javax.swing.JTextArea txtAlamat;
     private javax.swing.JTextField txtConfirPass;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtNamaPromo;
+    private javax.swing.JTextField txtNamaUsaha;
     private javax.swing.JTextField txtNewPass;
+    private javax.swing.JTextField txtNoTelp;
     private javax.swing.JTextField txtOldPass;
     private javax.swing.JTextPane txtPaneInfo;
     private javax.swing.JTextField txtPromo;
@@ -899,6 +1036,33 @@ public class FiturPengaturan extends javax.swing.JPanel {
         servicePengaturan.setAccount(parent, modelPengguna);
         lbNama.setText(txtNama.getText());
         back(new Dashboard(parent,modelPengguna));
+    }
+    
+//    Informasi Bisnis
+    private void dataBisnis() {
+        for(var data : servicePengaturan.loadBusiness()) {
+            switch (data.getKey()) {
+                case "Nama Usaha":
+                    txtNamaUsaha.setText(data.getValue());
+                    break;
+                case "No Telp":
+                    txtNoTelp.setText(data.getValue());
+                    break;
+                case "Alamat":
+                    txtAlamat.setText(data.getValue());
+                    break;
+            }
+        }
+    }
+    
+    private void aturBisnis() {
+        List<ModelPengaturanBisnis> modelPengaturanBisnis = List.of(
+            new ModelPengaturanBisnis("Nama Usaha", txtNamaUsaha.getText()),
+            new ModelPengaturanBisnis("No Telp", txtNoTelp.getText()),
+            new ModelPengaturanBisnis("Alamat", txtAlamat.getText())
+        );
+        servicePengaturan.setBusiness(parent, modelPengaturanBisnis);
+        back(new Dashboard(parent, modelPengguna));
     }
     
 //    Ubah Password
@@ -973,7 +1137,7 @@ public class FiturPengaturan extends javax.swing.JPanel {
         }
         
         ModelPromo promo = new ModelPromo(noPromosi, namaPromo, tglAwal, tglAkhir, banyak, jenis, keterangan);
-        if(validation(promo)) {
+        if(validationPromo(promo)) {
             servicePromo.addPromo(parent, promo);   
             txtNamaPromo.setText("");
             txtPromo.setText("");
@@ -1003,7 +1167,52 @@ public class FiturPengaturan extends javax.swing.JPanel {
         });
     }
     
-    private boolean validation(ModelPromo modelPromo) {
+    private boolean validationFormatEmail() {
+          String REGEX_EMAIL = "[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+          Pattern pattern = Pattern.compile(REGEX_EMAIL);
+          Matcher matcher = pattern.matcher(txtEmail.getText());
+          if(matcher.matches()) {
+              return true;
+          }
+          JOptionPane.showMessageDialog(parent, "Format email harus dalam bentuk email\n"
+                  + "Contoh : email@gmail.com");
+          return false;
+      }
+    
+    private boolean validationAccount() {
+        boolean valid = false;
+        if(txtNama.getText().isBlank()) {
+            JOptionPane.showMessageDialog(parent, "Nama tidak boleh kosong");
+        } else if(txtUsername.getText().isBlank()) {
+            JOptionPane.showMessageDialog(parent, "Username tidak boleh kosong");
+
+        } else if(txtEmail.getText().isBlank()) {
+            JOptionPane.showMessageDialog(parent, "Email tidak boleh kosong");
+        } else if(!txtEmail.getText().isBlank()) {
+            validationFormatEmail();
+        } else {
+            valid = true;
+        }
+        return valid;
+    }
+    
+    private boolean validationBusiness() {
+        boolean valid = false;
+        if(txtNamaUsaha.getText().isBlank()) {
+            JOptionPane.showMessageDialog(parent, "Nama usaha tidak boleh kosong");
+        } else if(txtNoTelp.getText().isBlank()) {
+            JOptionPane.showMessageDialog(parent, "No telp tidak boleh kosong");
+
+        } else if(txtAlamat.getText().isBlank()) {
+            JOptionPane.showMessageDialog(parent, "Alamat tidak boleh kosong");
+
+        } else {
+            valid = true;
+        }
+        return valid;
+    }
+    
+    private boolean validationPromo(ModelPromo modelPromo) {
         boolean valid = false;
         String keterangan = servicePromo.getKeterangan(modelPromo);
         if(keterangan.equals("Akan Datang")) {

@@ -57,6 +57,8 @@ public class FiturKaryawan extends javax.swing.JPanel {
         table.setRowSorter(rowSorter);
         pagination.setVisible(false);
         serviceKaryawan.loadData(tabmodel);
+        TFAlamatKaryawan.setLineWrap(true);
+        TFAlamatKaryawan.setWrapStyleWord(true);
         tampilJabatanStatus();
         actionRenderTable();
         cariData();

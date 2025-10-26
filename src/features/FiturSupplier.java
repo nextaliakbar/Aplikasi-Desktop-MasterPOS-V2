@@ -57,6 +57,8 @@ public class FiturSupplier extends javax.swing.JPanel {
         table.setRowSorter(rowSorter);
         serviceSupplier.loadData(tabmodel);
         pagination.setVisible(false);
+        TFAlamat.setLineWrap(true);
+        TFAlamat.setWrapStyleWord(true);
         actionRenderTable();
         cariData();
     }

@@ -58,7 +58,7 @@ public class ParamPemeriksaan {
     public void setTglPemeriksaan(String tglPemeriksaan) {
         this.tglPemeriksaan = tglPemeriksaan;
     }
-
+    
     public String getJamPemeriksaan() {
         return jamPemeriksaan;
     }

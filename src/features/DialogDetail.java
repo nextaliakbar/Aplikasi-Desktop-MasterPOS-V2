@@ -205,12 +205,11 @@ public class DialogDetail extends java.awt.Dialog {
             Date dateNow = new Date();
             String tglPenjualan = detailPenjualan.getModelPenjualan().getTglPenjualan();
             String jamPenjualan = new SimpleDateFormat("HH:mm").format(dateNow) + " WIB";
-            String admin = detailPenjualan.getModelPenjualan().getModelPengguna().getIdpengguna();
             String total = detailPenjualan.getModelPenjualan().getTotalPenjualan();
             String bayar = df.format(detailPenjualan.getModelPenjualan().getBayar());
             String kembali = df.format(detailPenjualan.getModelPenjualan().getKembali());
             String jenisPembayaran = detailPenjualan.getModelPenjualan().getJenisPembayaran();
-            ParamPenjualan paramater = new ParamPenjualan(tglPenjualan+","+jamPenjualan, noPenjualan, admin, total, bayar, kembali, jenisPembayaran, fields);
+            ParamPenjualan paramater = new ParamPenjualan(tglPenjualan+","+jamPenjualan, noPenjualan, total, bayar, kembali, jenisPembayaran, fields);
             Report.getInstance().printReportPenjualan(paramater);
             dispose();
         } catch(JRException ex) {

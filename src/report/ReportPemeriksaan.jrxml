@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportPemeriksaan" language="groovy" pageWidth="198" pageHeight="283" columnWidth="160" leftMargin="19" rightMargin="19" topMargin="19" bottomMargin="19" uuid="0a185fa4-375d-4b81-95e3-6ddfe2d8b6fa">
 	<property name="ireport.zoom" value="4.594972986357238"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="150"/>
+	<property name="ireport.y" value="96"/>
 	<parameter name="noPmrksn" class="java.lang.String"/>
 	<parameter name="tanggal" class="java.lang.String"/>
 	<parameter name="pasien" class="java.lang.String"/>
@@ -14,39 +14,42 @@
 	<parameter name="kembalian" class="java.lang.String"/>
 	<parameter name="jenis" class="java.lang.String"/>
 	<parameter name="admin" class="java.lang.String"/>
+	<parameter name="namaUsaha" class="java.lang.String"/>
+	<parameter name="alamat" class="java.lang.String"/>
+	<parameter name="noTelp" class="java.lang.String"/>
 	<field name="action" class="java.lang.String"/>
 	<field name="price" class="java.lang.String"/>
 	<field name="disc" class="java.lang.String"/>
 	<field name="subtotal" class="java.lang.String"/>
 	<title>
 		<band height="44" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="160" height="13" uuid="d18b4d04-b7d2-4478-a139-3453707121b7"/>
-				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[RUMAH CANTIK ALESHA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="13" width="160" height="15" uuid="4ab3fc0e-74c5-4ba9-9f67-eb331a10ad41"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<text><![CDATA[Jl Kaliurang,Sumbersari, Jember]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="28" width="160" height="15" uuid="ee0f072f-b526-4029-93e4-088fd13798c6"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<text><![CDATA[No.Telp : 08123456789]]></text>
-			</staticText>
 			<line>
 				<reportElement x="0" y="43" width="160" height="1" uuid="bcf4fc1f-e786-40ab-8027-1af58b2f3153"/>
 				<graphicElement>
 					<pen lineStyle="Solid"/>
 				</graphicElement>
 			</line>
+			<textField>
+				<reportElement x="0" y="0" width="160" height="13" uuid="c962d0c6-bdf2-44a4-a64e-6d4a3ce0a1cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namaUsaha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="13" width="160" height="15" uuid="1b8a3ebb-7d8d-4ef7-aa98-8a7e9a82aa23"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{alamat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="28" width="160" height="15" uuid="ae799e88-b4ae-4c71-8d44-4f498e3757d9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{noTelp}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -79,6 +82,13 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pasien}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="127" y="4" width="3" height="13" uuid="6f527f04-7675-4a9e-80eb-5a0fb61381db"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
 			<textField>
 				<reportElement x="76" y="17" width="40" height="13" uuid="895ab8a1-368a-4e06-85d8-aef78f5ca7ed"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -86,13 +96,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{staff}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="73" y="17" width="3" height="13" uuid="fb8f5ae4-70a9-4cc2-85a9-b28f0372021d"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[/]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="130" y="4" width="30" height="14" uuid="c80d47a1-4513-43c2-b493-23d9034bc8b2"/>
 				<textElement>
@@ -101,8 +104,8 @@
 				<textFieldExpression><![CDATA[$P{jam}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="127" y="4" width="3" height="13" uuid="6f527f04-7675-4a9e-80eb-5a0fb61381db"/>
-				<textElement textAlignment="Center">
+				<reportElement x="73" y="17" width="3" height="13" uuid="fb8f5ae4-70a9-4cc2-85a9-b28f0372021d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
 				<text><![CDATA[/]]></text>

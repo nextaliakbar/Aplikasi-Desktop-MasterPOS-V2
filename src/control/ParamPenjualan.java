@@ -12,10 +12,9 @@ import java.util.List;
  */
 public class ParamPenjualan {
 
-    public ParamPenjualan(String tglJam, String noPenjualan, String admin, String total, String bayar, String kembali, String jenis, List<FieldsPenjualan> fields) {
+    public ParamPenjualan(String tglJam, String noPenjualan, String total, String bayar, String kembali, String jenis, List<FieldsPenjualan> fields) {
         this.tglJam = tglJam;
         this.noPenjualan = noPenjualan;
-        this.admin = admin;
         this.total = total;
         this.bayar = bayar;
         this.kembali = kembali;
@@ -29,7 +28,6 @@ public class ParamPenjualan {
     
     private String tglJam;
     private String noPenjualan;
-    private String admin;
     private String total;
     private String bayar;
     private String kembali;
@@ -50,14 +48,6 @@ public class ParamPenjualan {
 
     public void setNoPenjualan(String noPenjualan) {
         this.noPenjualan = noPenjualan;
-    }
-
-    public String getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(String admin) {
-        this.admin = admin;
     }
     
     public List<FieldsPenjualan> getFields() {

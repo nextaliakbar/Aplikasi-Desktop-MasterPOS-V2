@@ -16,6 +16,8 @@
 - NetBeans IDE (Recommended)
 - [Java Development Kit versi 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) atau yang terbaru
 - Tools DBMS untuk SQLite 
+- Jasper Report versi 5.6.0 untuk modifikasi report (Recommend)
+- Java Development Kit versi 7 untuk Jasper Report
 
 ## Setup
 - Install NetBeans IDE

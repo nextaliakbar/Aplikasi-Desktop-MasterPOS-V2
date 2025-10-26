@@ -606,7 +606,7 @@ public class FiturPengeluaran extends javax.swing.JPanel {
 
         txtDesc.setBackground(new java.awt.Color(255, 255, 255));
         txtDesc.setColumns(20);
-        txtDesc.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtDesc.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
         txtDesc.setForeground(new java.awt.Color(185, 185, 185));
         txtDesc.setRows(5);
         txtDesc.setText("Catatan(Opsional)");
@@ -921,7 +921,7 @@ public class FiturPengeluaran extends javax.swing.JPanel {
     private void setFieldArea(String text, Color color, int styleFont) {
         txtDesc.setText(text);
         txtDesc.setForeground(color);
-        txtDesc.setFont(new Font(Font.DIALOG, styleFont, 14));
+        txtDesc.setFont(new Font(Font.DIALOG, styleFont, 20));
     }
     
     private boolean validation() {
