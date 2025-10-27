@@ -16,15 +16,20 @@
 - NetBeans IDE (Recommended)
 - [Java Development Kit versi 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) atau yang terbaru
 - Tools DBMS untuk SQLite 
-- Jasper Report versi 5.6.0 untuk modifikasi report (Recommend)
-- Java Development Kit versi 7 untuk Jasper Report
+- Jasper Report versi 5.6.0 untuk modifikasi report (Recommend), bisa download [disini](https://drive.google.com/drive/folders/1UXMiXOITagECUR7nH9tPSCr8Dh-po65j?usp=sharing)
+- Java Development Kit versi 7 untuk Jasper Report, bisa download [disini](https://drive.google.com/drive/folders/1UXMiXOITagECUR7nH9tPSCr8Dh-po65j?usp=sharing)
 
 ## Setup
 - Install NetBeans IDE
-- Konfigurasi Java Development Kit
+- Install Jasper Report
+- Install / Konfigurasi Java Development Kit
+- Install / Konfigurasi Java Development Kit versi 7
 - Cloning atau download source code proyek
 - Salin file database inventory_schema.sql di folder proyek root directory, jika belum punya password bisa follow dan DM aku di [Instagram](https://www.instagram.com/muhmdaliakbar_raf?igsh=MWNhMHVzN214emE2dg==) guys 
 <img src="Screenshot 2025-10-24 150037.png">
 
 - Buka proyek di NetBeans IDE
+- Rename AppConstantExample.java menjadi AppConstant.java
+<img src="Screenshot 2025-10-27 092959.png">
+
 - Jalankan Proyek
